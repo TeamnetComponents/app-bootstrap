@@ -5,7 +5,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.CascadeType;import javax.persistence.Column;import javax.persistence.Entity;import javax.persistence.Id;import javax.persistence.JoinColumn;import javax.persistence.JoinTable;import javax.persistence.ManyToMany;import javax.persistence.OneToMany;import javax.persistence.Table;import javax.validation.constraints.NotNull;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.lang.Object;import java.lang.Override;import java.lang.String;import java.util.HashSet;
@@ -52,6 +53,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Size(min = 0, max = 20)
     @Column(name = "activation_key", length = 20)
     private String activationKey;
+
+
+    @Size(min = 0, max = 20)
+    @Column(name = "sex", length = 20)
+    @Enumerated(EnumType.STRING)
+    private UserSex sex;
+
+
+
 
     @JsonIgnore
     @ManyToMany
@@ -145,6 +155,18 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setPersistentTokens(Set<PersistentToken> persistentTokens) {
         this.persistentTokens = persistentTokens;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public UserSex getSex() {
+        return sex;
+    }
+
+    public void setSex(UserSex sex) {
+        this.sex = sex;
     }
 
     @Override
