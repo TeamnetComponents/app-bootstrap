@@ -20,11 +20,13 @@ public class UserDTO {
 
     private List<String> roles;
 
+    private String gender;
+
     public UserDTO() {
     }
 
     public UserDTO(String login, String password, String firstName, String lastName, String email, String langKey,
-                   List<String> roles) {
+                   List<String> roles,String gender) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -32,6 +34,7 @@ public class UserDTO {
         this.email = email;
         this.langKey = langKey;
         this.roles = roles;
+        this.gender=gender;
     }
 
     public String getPassword() {
@@ -76,5 +79,9 @@ public class UserDTO {
         sb.append(", roles=").append(roles);
         sb.append('}');
         return sb.toString();
+    }
+
+    public String getGender() {
+        return gender;
     }
 }

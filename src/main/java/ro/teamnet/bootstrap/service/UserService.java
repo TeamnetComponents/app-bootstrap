@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
-                                      String langKey) {
+                                      String langKey,String gender) {
         User newUser = new User();
         Authority authority = authorityRepository.findOne("ROLE_USER");
         Set<Authority> authorities = new HashSet<>();
@@ -71,6 +71,7 @@ public class UserService {
         newUser.setLastName(lastName);
         newUser.setEmail(email);
         newUser.setLangKey(langKey);
+        newUser.setGender(gender);
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key

@@ -78,7 +78,7 @@ public class AccountResource {
                 return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
             }
             user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
-                    userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
+                    userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey(),userDTO.getGender());
             final Locale locale = Locale.forLanguageTag(user.getLangKey());
             String content = createHtmlContentFromTemplate(user, locale, request, response);
             mailService.sendActivationEmail(user.getEmail(), content, locale);
@@ -136,7 +136,7 @@ public class AccountResource {
                 user.getLastName(),
                 user.getEmail(),
                 user.getLangKey(),
-                roles),
+                roles,user.getGender()),
             HttpStatus.OK);
     }
 

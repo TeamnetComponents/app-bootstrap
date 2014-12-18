@@ -57,8 +57,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Size(min = 0, max = 20)
     @Column(name = "sex", length = 20)
-    @Enumerated(EnumType.STRING)
-    private UserSex sex;
+    private String gender;
 
 
 
@@ -161,12 +160,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return activated;
     }
 
-    public UserSex getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(UserSex sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @Override
