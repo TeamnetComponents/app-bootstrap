@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * A dictionary collection.
@@ -30,6 +31,12 @@ public class DictionaryCollection {
     @ManyToOne
     @JoinColumn(name="parent_collection_id", nullable=true)
     private DictionaryCollection parentCollection;
+
+    @OneToMany(mappedBy = "parentCollection")
+    private Collection<DictionaryCollection> childCollections;
+
+    @OneToMany(mappedBy = "collection")
+    private Collection<Dictionary> dictionaries;
 
     public Long getId() {
         return id;
@@ -69,6 +76,22 @@ public class DictionaryCollection {
 
     public void setParentCollection(DictionaryCollection parentCollection) {
         this.parentCollection = parentCollection;
+    }
+
+    public Collection<DictionaryCollection> getChildCollections() {
+        return childCollections;
+    }
+
+    public void setChildCollections(Collection<DictionaryCollection> childCollections) {
+        this.childCollections = childCollections;
+    }
+
+    public Collection<Dictionary> getDictionaries() {
+        return dictionaries;
+    }
+
+    public void setDictionaries(Collection<Dictionary> dictionaries) {
+        this.dictionaries = dictionaries;
     }
 
     @Override

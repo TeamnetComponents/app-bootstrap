@@ -34,7 +34,7 @@ public class Dictionary {
 
     @ManyToOne
     @JoinColumn(name="value_type_id", nullable=true)
-    private ValueType valueType;
+    private DictionaryElement valueType;
 
     public Long getId() {
         return id;
@@ -84,11 +84,11 @@ public class Dictionary {
         this.collection = collection;
     }
 
-    public ValueType getValueType() {
+    public DictionaryElement getValueType() {
         return valueType;
     }
 
-    public void setValueType(ValueType valueType) {
+    public void setValueType(DictionaryElement valueType) {
         this.valueType = valueType;
     }
 

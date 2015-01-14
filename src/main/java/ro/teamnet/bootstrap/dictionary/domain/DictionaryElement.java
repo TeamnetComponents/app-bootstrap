@@ -20,7 +20,6 @@ import java.util.Collection;
 @Table(name = "T_DICTIONARY_ELEMENT")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorFormula("(select d.code from T_DICTIONARY d where d.id = dictionary_id)")
 public class DictionaryElement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

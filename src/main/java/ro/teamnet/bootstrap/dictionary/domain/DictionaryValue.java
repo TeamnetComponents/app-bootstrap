@@ -44,7 +44,7 @@ public class DictionaryValue {
 
     @ManyToOne
     @JoinColumn(name = "language_id", nullable = true)
-    private Language language;
+    private DictionaryElement language;
 
     public Long getId() {
         return id;
@@ -86,11 +86,11 @@ public class DictionaryValue {
         this.dictionaryElement = dictionaryElement;
     }
 
-    public Language getLanguage() {
+    public DictionaryElement getLanguage() {
         return language;
     }
 
-    public void setLanguage(Language language) {
+    public void setLanguage(DictionaryElement language) {
         this.language = language;
     }
 
