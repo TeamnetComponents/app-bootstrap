@@ -9,10 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.dictionary.domain.DictionaryElement;
 import ro.teamnet.bootstrap.dictionary.repository.DictionaryElementRepository;
+import ro.teamnet.bootstrap.extend.AppPage;
+import ro.teamnet.bootstrap.extend.AppPageable;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * REST controller for managing dictionary element.
@@ -44,9 +45,9 @@ public class DictionaryElementResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<DictionaryElement> getAll() {
+    public AppPage<DictionaryElement> getAll(AppPageable appPageable) {
         log.debug("REST request to get all DictionaryElements");
-        return dictionaryElementRepository.findAll();
+        return dictionaryElementRepository.findAll(appPageable);
     }
 
     /**

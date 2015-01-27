@@ -1,10 +1,10 @@
 package ro.teamnet.bootstrap.dictionary.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import ro.teamnet.bootstrap.dictionary.domain.Dictionary;
+import ro.teamnet.bootstrap.extend.AppRepository;
 
 /**
  * Spring Data JPA repository for the Dictionary entity.
  */
-public interface DictionaryRepository extends JpaRepository<Dictionary, Long> {
+public interface DictionaryRepository extends AppRepository<Dictionary, Long> {
 }

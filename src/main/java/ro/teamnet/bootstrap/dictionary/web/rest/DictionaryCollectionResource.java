@@ -9,10 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.dictionary.domain.DictionaryCollection;
 import ro.teamnet.bootstrap.dictionary.repository.DictionaryCollectionRepository;
+import ro.teamnet.bootstrap.extend.AppPage;
+import ro.teamnet.bootstrap.extend.AppPageable;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * REST controller for managing dictionary collections.
@@ -45,9 +46,9 @@ public class DictionaryCollectionResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<DictionaryCollection> getAll() {
+    public AppPage<DictionaryCollection> getAll(AppPageable appPageable) {
         log.debug("REST request to get all DictionaryCollections");
-        return dictionaryCollectionRepository.findAll();
+        return dictionaryCollectionRepository.findAll(appPageable);
     }
 
     /**

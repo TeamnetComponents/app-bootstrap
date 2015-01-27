@@ -1,11 +1,11 @@
 package ro.teamnet.bootstrap.dictionary.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import ro.teamnet.bootstrap.dictionary.domain.ElementRelation;
+import ro.teamnet.bootstrap.extend.AppRepository;
 
 /**
  * Spring Data JPA repository for the ElementRelation entity.
  */
-public interface ElementRelationRepository extends JpaRepository<ElementRelation,Long>{
+public interface ElementRelationRepository extends AppRepository<ElementRelation,Long> {
 
 }

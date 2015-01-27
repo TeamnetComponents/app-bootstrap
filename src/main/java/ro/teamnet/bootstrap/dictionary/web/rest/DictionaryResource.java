@@ -9,10 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.dictionary.domain.Dictionary;
 import ro.teamnet.bootstrap.dictionary.repository.DictionaryRepository;
+import ro.teamnet.bootstrap.extend.AppPage;
+import ro.teamnet.bootstrap.extend.AppPageable;
+import ro.teamnet.bootstrap.web.rest.BaseController;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 
 /**
@@ -20,7 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/dictionary")
-public class DictionaryResource {
+public class DictionaryResource extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(DictionaryResource.class);
 
@@ -46,9 +48,9 @@ public class DictionaryResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Dictionary> getAll() {
+    public AppPage<Dictionary> getAll(AppPageable appPageable) {
         log.debug("REST request to get all dictionaries");
-        return dictionaryRepository.findAll();
+        return dictionaryRepository.findAll(appPageable);
     }
 
     /**

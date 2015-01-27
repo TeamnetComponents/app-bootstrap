@@ -10,5 +10,6 @@ import java.io.Serializable;
 @NoRepositoryBean
 public interface AppRepository <T, ID extends Serializable> extends JpaRepository<T, ID> {
     Page<T> findAll(Pageable pageable);
+    AppPage<T> findAll(AppPageable pageable);
 
 }
