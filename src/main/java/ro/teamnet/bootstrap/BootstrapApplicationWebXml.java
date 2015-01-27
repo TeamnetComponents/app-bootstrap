@@ -1,13 +1,3 @@
-/**
- * AbstractWebXml.java
- *
- * Copyright (c) 2014 Teamnet. All Rights Reserved.
- *
- * This source file may not be copied, modified or redistributed,
- * in whole or in part, in any form or for any reason, without the express
- * written consent of Teamnet.
- **/
-
 package ro.teamnet.bootstrap;
 
 import org.slf4j.Logger;
@@ -16,13 +6,18 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import ro.teamnet.bootstrap.config.Constants;
 
-public class AbstractWebXml extends SpringBootServletInitializer {
+/**
+ * This is an helper Java class that provides an alternative to creating a web.xml.
+ */
+public class BootstrapApplicationWebXml extends SpringBootServletInitializer {
 
-    private final Logger log = LoggerFactory.getLogger(AbstractWebXml.class);
+    private final Logger log = LoggerFactory.getLogger(BootstrapApplicationWebXml.class);
 
     @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
-        throw new IllegalStateException("You should implement this method in your ApplicationWebXml!!!");
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.profiles(addDefaultProfile())
+                .showBanner(false)
+                .sources(BootstrapApplication.class);
     }
 
     /**

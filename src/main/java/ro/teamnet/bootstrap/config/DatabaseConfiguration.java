@@ -21,12 +21,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ro.teamnet.bootstrap.extend.AppRepositoryFactoryBean;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableJpaRepositories({"ro.teamnet"})
+@EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository", "ro.teamnet.bootstrap.dictionary.repository"}, repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 @EntityScan({"ro.teamnet"})
@@ -36,6 +37,13 @@ public class DatabaseConfiguration implements EnvironmentAware {
 
     private RelaxedPropertyResolver propertyResolver;
 
+    public void setPropertyResolver(RelaxedPropertyResolver propertyResolver) {
+        this.propertyResolver = propertyResolver;
+    }
+
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
 
     private Environment env;
 
