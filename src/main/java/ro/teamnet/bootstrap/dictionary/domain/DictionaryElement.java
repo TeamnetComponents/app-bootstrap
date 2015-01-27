@@ -1,14 +1,7 @@
 package ro.teamnet.bootstrap.dictionary.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DiscriminatorFormula;
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
-import ro.teamnet.bootstrap.domain.util.CustomLocalDateSerializer;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -31,20 +24,11 @@ public class DictionaryElement {
     @Column(name = "description")
     private String description;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @Column(name = "activation_date", nullable = false)
-    private LocalDate activationDate;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @Column(name = "inactivation_date", nullable = false)
-    private LocalDate inactivationDate;
+    @Column(name = "default_value")
+    private String defaultValue;
 
     @ManyToOne
-    @JoinColumn(name="dictionary_id", nullable=false)
+    @JoinColumn(name = "dictionary_id", nullable = false)
     private Dictionary dictionary;
 
     @OneToMany(mappedBy = "dictionaryElement")
@@ -74,20 +58,12 @@ public class DictionaryElement {
         this.description = description;
     }
 
-    public LocalDate getActivationDate() {
-        return activationDate;
+    public String getDefaultValue() {
+        return defaultValue;
     }
 
-    public void setActivationDate(LocalDate activationDate) {
-        this.activationDate = activationDate;
-    }
-
-    public LocalDate getInactivationDate() {
-        return inactivationDate;
-    }
-
-    public void setInactivationDate(LocalDate inactivationDate) {
-        this.inactivationDate = inactivationDate;
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public Dictionary getDictionary() {
@@ -129,9 +105,9 @@ public class DictionaryElement {
             "id=" + id +
             ", code='" + code + '\'' +
             ", description='" + description + '\'' +
-            ", activationDate=" + activationDate +
-            ", inactivationDate=" + inactivationDate +
+            ", defaultValue='" + defaultValue + '\'' +
             ", dictionary=" + dictionary +
+            ", values=" + values +
             '}';
     }
 }
