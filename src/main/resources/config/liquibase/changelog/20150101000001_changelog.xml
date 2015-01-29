@@ -16,7 +16,7 @@
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
-    <changeSet id="00000000000001" author="bootstrap">
+    <changeSet id="00000000000001" author="bootstrap" failOnError="false">
         <createTable tableName="T_USER">
             <column name="login" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
