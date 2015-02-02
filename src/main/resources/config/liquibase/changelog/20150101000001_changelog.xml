@@ -7,21 +7,29 @@
     <property name="now" value="now()" dbms="mysql,h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
     <property name="now" value="sysdate" dbms="oracle"/>
+    <property name="activated" value="true" dbms="postgresql"/>
+    <property name="activated" value="1" dbms="oracle"/>
 
     <changeSet id="00000000000000" author="bootstrap" dbms="postgresql">
         <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
     </changeSet>
 
+    <changeSet id="00000000000000" author="bootstrap" dbms="oracle">
+        <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+
+
     <!--
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
-    <changeSet id="00000000000001" author="bootstrap" failOnError="false">
+    <changeSet id="00000000000001" author="bootstrap" failOnError="true">
         <createTable tableName="T_USER">
             <column name="login" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="password" type="varchar(100)"/>
+            <column name="passw" type="varchar(100)"/>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)">
@@ -71,12 +79,12 @@
             <column name="user_agent" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="idx_user_authority"
+        <!--<createIndex indexName="idx_user_authority"
                      tableName="T_USER_AUTHORITY"
                      unique="true">
             <column name="login" type="varchar(50)"/>
             <column name="name" type="varchar(50)"/>
-        </createIndex>
+        </createIndex>-->
 
         <addForeignKeyConstraint baseColumnNames="name"
                                  baseTableName="T_USER_AUTHORITY"
@@ -96,22 +104,65 @@
                                  referencedColumnNames="login"
                                  referencedTableName="T_USER"/>
 
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/users.csv"
-                  separator=";"
-                  tableName="T_USER">
-            <column name="activated" type="boolean"/>
-        </loadData>
+        <insert tableName="T_USER">
+            <column name="login" value="system"/>
+            <column name="passw" value="$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG"/>
+            <column name="first_name" value="System"/>
+            <column name="last_name" value="System"/>
+            <column name="email" value=""/>
+            <column name="activated" value="${activated}"/>
+            <column name="lang_key" value="en"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="T_USER">
+            <column name="login" value="admin"/>
+            <column name="passw" value="$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC"/>
+            <column name="first_name" value="Admin"/>
+            <column name="last_name" value="Admin"/>
+            <column name="email" value=""/>
+            <column name="activated" value="${activated}"/>
+            <column name="lang_key" value="en"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="T_USER">
+            <column name="login" value="user"/>
+            <column name="passw" value="$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K"/>
+            <column name="first_name" value="User"/>
+            <column name="last_name" value="User"/>
+            <column name="email" value=""/>
+            <column name="activated" value="${activated}"/>
+            <column name="lang_key" value="en"/>
+            <column name="created_by" value="system"/>
+        </insert>
 
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/authorities.csv"
-                  separator=";"
-                  tableName="T_AUTHORITY"/>
+        <insert tableName="T_AUTHORITY">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="T_AUTHORITY">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
 
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/users_authorities.csv"
-                  separator=";"
-                  tableName="T_USER_AUTHORITY"/>
+        <insert tableName="T_USER_AUTHORITY">
+            <column name="login" value="system"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="T_USER_AUTHORITY">
+            <column name="login" value="system"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="T_USER_AUTHORITY">
+            <column name="login" value="admin"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="T_USER_AUTHORITY">
+            <column name="login" value="admin"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="T_USER_AUTHORITY">
+            <column name="login" value="user"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+
 
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
             <column name="event_id" type="bigint" autoIncrement="true">
@@ -135,14 +186,14 @@
         </createTable>
         <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
 
-        <createIndex indexName="idx_persistent_audit_event"
+        <createIndex indexName="idx_pers_audit_event"
                      tableName="T_PERSISTENT_AUDIT_EVENT"
                      unique="false">
             <column name="principal" type="varchar(255)"/>
             <column name="event_date" type="timestamp"/>
         </createIndex>
 
-        <createIndex indexName="idx_persistent_audit_event_data"
+        <createIndex indexName="idx_pers_audit_event_data"
                      tableName="T_PERSISTENT_AUDIT_EVENT_DATA"
                      unique="false">
             <column name="event_id" type="bigint"/>
@@ -150,9 +201,9 @@
 
         <addForeignKeyConstraint baseColumnNames="event_id"
                                  baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA"
-                                 constraintName="FK_event_persistent_audit_event_data"
+                                 constraintName="FK_ev_pers_aud_ev_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
     </changeSet>
-    
+
 </databaseChangeLog>

@@ -10,7 +10,7 @@
 
     <changeSet id="17122014" author="bootstrap">
         <addColumn tableName="t_user">
-            <column name="sex" type="varchar(20)"/>
+            <column name="gender" type="varchar(20)"/>
         </addColumn>
     </changeSet>
 
