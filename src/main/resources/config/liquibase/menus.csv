@@ -1,0 +1,60 @@
+id;parent_id;name;route;css_class
+1;0;Dashboard;ajax/dashboard.html;
+2;0;Charts;;expandable
+3;2;xCharts;ajax/charts_xcharts.html;
+4;2;Flot Charts;ajax/charts_flot.html;
+5;2;Google Charts;ajax/charts_google.html;
+6;2;Morris Charts;ajax/charts_morris.html;
+7;2;AmCharts;ajax/charts_amcharts.html;
+8;2;Chartist;ajax/charts_chartist.html;
+9;2;CoinDesk realtime;ajax/charts_coindesk.html;
+10;0;Tables;;expandable
+11;10;Simple Tables;ajax/tables_simple.html;
+12;10;Data Tables;ajax/tables_datatables.html;
+13;10;Beauty Tables;ajax/tables_beauty.html;
+14;0;Forms;;expandable
+15;14;Elements;ajax/forms_elements.html;
+16;14;Layouts;ajax/forms_layouts.html;
+17;14;File Uploader;ajax/forms_file_uploader.html;
+18;0;UI Elements;;expandable
+19;18;Grid;ajax/ui_grid.html;
+20;18;Buttons;ajax/ui_buttons.html;
+21;18;Progress Bars;ajax/ui_progressbars.html;
+22;18;Jquery UI;ajax/ui_jquery-ui.html;
+23;18;Icons;ajax/ui_icons.html;
+24;0;Pages;;expandable
+25;24;Login;ajax/page_login.html;
+26;24;Register;ajax/page_register.html;
+27;24;Locked Screen;ajax/page_locked.html;
+28;24;Contacts;ajax/page_contacts.html;
+29;24;Feed;ajax/page_feed.html;
+30;24;Messages;ajax/page_messages.html;
+31;24;Pricing;ajax/page_pricing.html;
+32;24;Product;ajax/page_product.html;
+33;24;Invoice;ajax/page_invoice.html;
+34;24;Search Results;ajax/page_search.html;
+35;24;Error 404;ajax/page_404.html;
+36;24;Error 500;ajax/page_500.html;
+37;0;Gallery;;expandable
+38;37;Simple Gallery;ajax/gallery_simple.html;
+39;37;Flickr Gallery;ajax/gallery_flickr.html;
+40;0;Typography;ajax/typography.html;
+41;0;Calendar;ajax/calendar.html;
+42;0;Multilevel menu;;expandable
+43;42;First level menu;;
+44;42;First level menu;;
+45;42;Second level menu group;;expandable
+46;45;Second level menu;;
+47;45;Second level menu;;
+48;45;Three level menu group;;expandable
+49;48;Three level menu;;
+50;48;Three level menu;;
+51;48;Four level menu group;;expandable
+52;51;Four level menu;;
+53;51;Four level menu;;
+54;51;Five level menu group;;expandable
+55;54;Five level menu;;
+56;54;Five level menu;;
+
+
+
