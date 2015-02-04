@@ -109,7 +109,7 @@
             <column name="passw" value="$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG"/>
             <column name="first_name" value="System"/>
             <column name="last_name" value="System"/>
-            <column name="email" value=""/>
+            <column name="email" value="system.system@teamnet.ro"/>
             <column name="activated" value="${activated}"/>
             <column name="lang_key" value="en"/>
             <column name="created_by" value="system"/>
@@ -119,7 +119,7 @@
             <column name="passw" value="$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC"/>
             <column name="first_name" value="Admin"/>
             <column name="last_name" value="Admin"/>
-            <column name="email" value=""/>
+            <column name="email" value="admin.admin@teamnet.ro"/>
             <column name="activated" value="${activated}"/>
             <column name="lang_key" value="en"/>
             <column name="created_by" value="system"/>
@@ -129,7 +129,7 @@
             <column name="passw" value="$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K"/>
             <column name="first_name" value="User"/>
             <column name="last_name" value="User"/>
-            <column name="email" value=""/>
+            <column name="email" value="user.user@teamnet.ro"/>
             <column name="activated" value="${activated}"/>
             <column name="lang_key" value="en"/>
             <column name="created_by" value="system"/>
