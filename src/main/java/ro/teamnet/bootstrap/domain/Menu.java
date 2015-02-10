@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,9 +14,9 @@ import java.util.Set;
 @Table(name = "T_MENU")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Menu {
-    @NotNull
+
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "parent_id")
@@ -31,6 +30,12 @@ public class Menu {
 
     @Column(name = "css_class")
     private String cssClass;
+
+    @Column(name = "sort_no")
+    private Long sortNo;
+
+    @Column(name = "active")
+    private Long active;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -88,6 +93,22 @@ public class Menu {
         this.roles = roles;
     }
 
+    public Long getSortNo() {
+        return sortNo;
+    }
+
+    public void setSortNo(Long sortNo) {
+        this.sortNo = sortNo;
+    }
+
+    public Long getActive() {
+        return active;
+    }
+
+    public void setActive(Long active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,6 +122,8 @@ public class Menu {
         if (name != null ? !name.equals(menu.name) : menu.name != null) return false;
         if (parentId != null ? !parentId.equals(menu.parentId) : menu.parentId != null) return false;
         if (route != null ? !route.equals(menu.route) : menu.route != null) return false;
+        if (!sortNo.equals(menu.sortNo)) return false;
+        if (!active.equals(menu.active)) return false;
 
         return true;
     }
@@ -113,6 +136,8 @@ public class Menu {
         result = 31 * result + (route != null ? route.hashCode() : 0);
         result = 31 * result + (cssClass != null ? cssClass.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        result = 31 * result + (sortNo != null ? sortNo.hashCode() : 0);
+        result = 31 * result + (active != null ? active.hashCode() : 0);
         return result;
     }
 
@@ -125,6 +150,8 @@ public class Menu {
                 ", route='" + route + '\'' +
                 ", cssClass='" + cssClass + '\'' +
                 ", authorities=" + roles +
+                ", sortNo=" + sortNo +
+                ", active=" + active +
                 '}';
     }
 }

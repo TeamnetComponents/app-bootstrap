@@ -10,13 +10,15 @@
 
     <changeSet id="03022015" author="bootstrap">
         <createTable tableName="T_MENU">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="parent_id" type="bigint"/>
             <column name="name" type="varchar(100)"/>
             <column name="route" type="varchar(255)"/>
             <column name="css_class" type="varchar(100)"/>
+            <column name="sort_no" type="bigint"/>
+            <column name="active" type="bigint"/>
         </createTable>
         <createTable tableName="T_MENU_AUTHORITY">
             <column name="menu_id" type="bigint" />
