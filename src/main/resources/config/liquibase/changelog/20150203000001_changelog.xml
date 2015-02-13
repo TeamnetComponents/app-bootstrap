@@ -50,4 +50,20 @@
             <column name="activated" type="boolean"/>
         </loadData>
     </changeSet>
+
+    <changeSet id="12022015#1" author="bootstrap">
+        <insert tableName="T_DICTIONARY">
+            <column name="id" value="3"/>
+            <column name="code" value="C_SYSTEM-D_FA"/>
+            <column name="name" value="FontAwesome icon classes"/>
+            <column name="description" value="FontAwesome available icon css classes"/>
+            <column name="collection_id" value="1"/>
+        </insert>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/dictionary_fa_icons.csv"
+                  separator=";"
+                  tableName="T_DICTIONARY_ELEMENT">
+        </loadData>
+    </changeSet>
 </databaseChangeLog>
