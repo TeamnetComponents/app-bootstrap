@@ -19,6 +19,7 @@
             <column name="css_class" type="varchar(100)"/>
             <column name="sort_no" type="bigint"/>
             <column name="active" type="bigint"/>
+            <column name="module_name" type="varchar(100)"/>
         </createTable>
         <createTable tableName="T_MENU_AUTHORITY">
             <column name="menu_id" type="bigint" />
