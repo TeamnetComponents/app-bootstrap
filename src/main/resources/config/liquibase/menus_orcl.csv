@@ -1,0 +1,64 @@
+id;parent_id;name;route;css_class;sort_no;active
+1;0;Dashboard;ajax/dashboard.html;fa-dashboard;1;1
+2;0;Charts;;fa-bar-chart-o;2;1
+3;2;xCharts;ajax/charts_xcharts.html;;201;1
+4;2;Flot Charts;ajax/charts_flot.html;;202;1
+5;2;Google Charts;ajax/charts_google.html;;203;1
+6;2;Morris Charts;ajax/charts_morris.html;;204;1
+7;2;AmCharts;ajax/charts_amcharts.html;;205;1
+8;2;Chartist;ajax/charts_chartist.html;;206;1
+9;2;CoinDesk realtime;ajax/charts_coindesk.html;;207;1
+10;0;Tables;;fa-table;3;1
+11;10;Simple Tables;ajax/tables_simple.html;;1001;1
+12;10;Data Tables;ajax/tables_datatables.html;;1002;1
+13;10;Beauty Tables;ajax/tables_beauty.html;;1003;1
+14;0;Forms;;fa-edit;4;1
+15;14;Elements;ajax/forms_elements.html;;1401;1
+16;14;Layouts;ajax/forms_layouts.html;;1402;1
+17;14;File Uploader;ajax/forms_file_uploader.html;;1403;1
+18;0;UI Elements;;fa-desktop;5;1
+19;18;Grid;ajax/ui_grid.html;;1801;1
+20;18;Buttons;ajax/ui_buttons.html;;1802;1
+21;18;Progress Bars;ajax/ui_progressbars.html;;1803;1
+22;18;Jquery UI;ajax/ui_jquery-ui.html;;1804;1
+23;18;Icons;ajax/ui_icons.html;;1805;1
+24;0;Pages;;fa-th-list;6;1
+25;24;Login;ajax/page_login.html;;2401;1
+26;24;Register;ajax/page_register.html;;2402;1
+27;24;Locked Screen;ajax/page_locked.html;;2403;1
+28;24;Contacts;ajax/page_contacts.html;;2404;1
+29;24;Feed;ajax/page_feed.html;;2405;1
+30;24;Messages;ajax/page_messages.html;;2406;1
+31;24;Pricing;ajax/page_pricing.html;;2407;1
+32;24;Product;ajax/page_product.html;;2408;1
+33;24;Invoice;ajax/page_invoice.html;;2409;1
+34;24;Search Results;ajax/page_search.html;;2410;1
+35;24;Error 404;ajax/page_404.html;;2411;1
+36;24;Error 500;ajax/page_500.html;;2412;1
+37;0;Gallery;;fa-picture-o;8;1
+38;37;Simple Gallery;ajax/gallery_simple.html;;3701;1
+39;37;Flickr Gallery;ajax/gallery_flickr.html;;3702;1
+40;0;Typography;ajax/typography.html;fa-font;9;1
+41;0;Calendar;ajax/calendar.html;fa-calendar;10;1
+42;0;Multilevel menu;;fa-picture-o;11;1
+43;42;First level menu;;;4201;1
+44;42;First level menu;;;4202;1
+45;42;Second level menu group;;fa-plus-square;4203;1
+46;45;Second level menu;;;4501;1
+47;45;Second level menu;;;4502;1
+48;45;Three level menu group;;fa-plus-square;4503;1
+49;48;Three level menu;;;4801;1
+50;48;Three level menu;;;4802;1
+51;48;Four level menu group;;fa-plus-square;4803;1
+52;51;Four level menu;;;5101;1
+53;51;Four level menu;;;5102;1
+54;51;Five level menu group;;fa-plus-square;5103;1
+55;54;Five level menu;;;5401;1
+56;54;Five level menu;;;5402;1
+57;0;Maps;;fa-map-marker;7;1
+58;57;OpenStreetMap;ajax/maps.html;;5701;1
+59;57;Fullscreen map;ajax/map_fullscreen.html;;5702;1
+60;57;Leaflet;ajax/map_leaflet.html;;5703;1
+
+
+
