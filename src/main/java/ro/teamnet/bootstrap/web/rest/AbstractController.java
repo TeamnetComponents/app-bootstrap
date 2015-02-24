@@ -23,7 +23,7 @@ public abstract class AbstractController<T extends Serializable> {
     private final Logger log = LoggerFactory.getLogger(AbstractController.class);
 
 
-    AbstractService<T> abstractService;
+    public AbstractService<T> abstractService;
 
     public AbstractController(AbstractService<T> abstractService) {
         this.abstractService = abstractService;
