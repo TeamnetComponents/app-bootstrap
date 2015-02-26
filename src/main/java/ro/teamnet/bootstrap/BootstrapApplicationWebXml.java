@@ -9,7 +9,7 @@ import ro.teamnet.bootstrap.config.Constants;
 /**
  * This is an helper Java class that provides an alternative to creating a web.xml.
  */
-public class BootstrapApplicationWebXml extends SpringBootServletInitializer {
+public abstract class BootstrapApplicationWebXml extends SpringBootServletInitializer {
 
     private final Logger log = LoggerFactory.getLogger(BootstrapApplicationWebXml.class);
 
