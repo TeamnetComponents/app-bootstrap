@@ -9,55 +9,62 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.teamnet.bootstrap.extend.AppPageRequest;
 import ro.teamnet.bootstrap.extend.AppRepository;
 import ro.teamnet.bootstrap.extend.Filter;
+import ro.teamnet.bootstrap.extend.Filters;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
-public abstract class AbstractServiceImpl<T extends Serializable> implements AbstractService<T> {
+public abstract class AbstractServiceImpl<T extends Serializable, ID extends Serializable> implements AbstractService<T, ID> {
 
 
-         private final Logger log = LoggerFactory.getLogger(AbstractServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(AbstractServiceImpl.class);
 
-         private final AppRepository<T,Long> repository;
+    private final AppRepository<T, ID> repository;
 
-         public AbstractServiceImpl(AppRepository<T,Long> repository){
-           this.repository=repository;
-         }
+    public AbstractServiceImpl(AppRepository<T, ID> repository) {
+        this.repository = repository;
+    }
 
+    /**
+     * Retrieves the specific repository, for implementations of this interface.
+     *
+     * @return The underlying repository.
+     */
+    protected AppRepository<T, ID> getRepository() {
+        return this.repository;
+    }
 
-        @Override
-        @Transactional
-        public T save(T t){
-            log.debug("REST request to save : {}", t);
-            return repository.save(t) ;
-        }
-
-
-
-        @Override
-        public List<T> findAll(){
-            log.debug("REST request to get all records");
-            return repository.findAll();
-        }
-
-
-
-        @Override
-        public T findOne(Long id){
-            log.debug("REST request to get : {}", id);
-            return (T)repository.findOne(id);
-        }
+    @Override
+    @Transactional
+    public T save(T t) {
+        log.debug("REST request to save : {}", t);
+        return repository.save(t);
+    }
 
 
-        @Override
-        @Transactional
-        public void delete(Long id){
-            log.debug("REST request to delete : {}", id);
-            repository.delete(id);
-        }
+    @Override
+    public List<T> findAll() {
+        log.debug("REST request to get all records");
+        return repository.findAll();
+    }
+
+
+    @Override
+    public T findOne(ID id) {
+        log.debug("REST request to get : {}", id);
+        return (T) repository.findOne(id);
+    }
+
+
+    @Override
+    @Transactional
+    public void delete(ID id) {
+        log.debug("REST request to delete : {}", id);
+        repository.delete(id);
+    }
 
     protected final Sort constructSort(final String sortBy, final String sortOrder) {
         Sort sortInfo = null;
@@ -71,19 +78,20 @@ public abstract class AbstractServiceImpl<T extends Serializable> implements Abs
     public Page<T> findAllPaginatedAndSortedRawWithFilter(int page, int size, String sortBy, String sortOrder, String filterObject) {
         final Sort sort = constructSort(sortBy, sortOrder);
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Filter> filters = new ArrayList<>();
-        if(filterObject != null){
+        Filters filters = new Filters();
+        if (filterObject != null) {
             try {
                 filterObject = "[" + filterObject + "]";
-                filters = objectMapper.readValue(filterObject, objectMapper.getTypeFactory().constructCollectionType(List.class, Filter.class));
+                filters.addFilters(
+                    Collection.class.<Filter>cast(
+                        objectMapper.readValue(filterObject, objectMapper.getTypeFactory().constructCollectionType(List.class, Filter.class))));
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
-        AppPageRequest appPageRequest = new AppPageRequest(page,size,sort, filters);
+        AppPageRequest appPageRequest = new AppPageRequest(page, size, sort, filters);
         return repository.findAll(appPageRequest);
     }
-
 
 
 }
