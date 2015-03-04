@@ -30,6 +30,12 @@
         </createTable>
         <addPrimaryKey columnNames="menu_id, authority" tableName="T_MENU_AUTHORITY"/>
 
+        <addForeignKeyConstraint baseColumnNames="authority"
+                                 baseTableName="T_MENU_AUTHORITY"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="code"
+                                 referencedTableName="T_ROLE"/>
+
         <addForeignKeyConstraint baseColumnNames="menu_id"
                                  baseTableName="T_MENU_AUTHORITY"
                                  constraintName="fk_menu_id"

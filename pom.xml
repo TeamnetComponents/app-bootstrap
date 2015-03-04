@@ -13,7 +13,7 @@
     <name>app-bootstrap</name>
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
-	
+
 	<dependencies>
         <dependency>
             <groupId>ro.teamnet.bootstrap</groupId>
@@ -29,6 +29,11 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ro.teamnet.bootstrap</groupId>
+            <artifactId>app-bootstrap-security</artifactId>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 

@@ -17,15 +17,23 @@
             overflowToDisk="false"
             />
 
-    <cache name="ro.teamnet.bootstrap.domain.User"
+    <cache name="ro.teamnet.bootstrap.domain.Account"
            timeToLiveSeconds="3600">
     </cache>
 
-    <cache name="ro.teamnet.bootstrap.domain.Authority"
+   <cache name="ro.teamnet.bootstrap.domain.Role"
            timeToLiveSeconds="3600">
     </cache>
 
-    <cache name="ro.teamnet.bootstrap.domain.User.authorities"
+    <cache name="ro.teamnet.bootstrap.domain.ModuleRight"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="ro.teamnet.bootstrap.domain.Module"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="ro.teamnet.bootstrap.domain.Account.roles"
            timeToLiveSeconds="3600">
     </cache>
 
@@ -33,7 +41,7 @@
            timeToLiveSeconds="3600">
     </cache>
 
-    <cache name="ro.teamnet.bootstrap.domain.User.persistentTokens"
+    <cache name="ro.teamnet.bootstrap.domain.Account.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
 </ehcache>

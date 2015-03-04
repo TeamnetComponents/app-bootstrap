@@ -1,10 +1,10 @@
 package ro.teamnet.bootstrap.config;
 
-import ro.teamnet.bootstrap.security.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
@@ -13,14 +13,16 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.RememberMeServices;import ro.teamnet.bootstrap.security.AjaxAuthenticationFailureHandler;import ro.teamnet.bootstrap.security.AjaxAuthenticationSuccessHandler;import ro.teamnet.bootstrap.security.AjaxLogoutSuccessHandler;import ro.teamnet.bootstrap.security.AuthoritiesConstants;import ro.teamnet.bootstrap.security.Http401UnauthorizedEntryPoint;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
+import ro.teamnet.bootstrap.security.*;
 
-import javax.inject.Inject;import java.lang.Exception;import java.lang.Override;
+import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
+@Import(AdditionalSpringSecurityConfiguration.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Inject
@@ -39,7 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;
 
     @Inject
-    private UserDetailsService userDetailsService;
+    @Qualifier(value = "customUserDetailsService")
+    private UserDetailsService customUserDetailsService;
 
     @Inject
     private RememberMeServices rememberMeServices;
@@ -52,8 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Inject
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(customUserDetailsService)
+            .passwordEncoder(passwordEncoder());
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.util.ReflectionUtils;
+import ro.teamnet.bootstrap.security.filter.SecurityAccessFilter;
 import ro.teamnet.bootstrap.web.filter.CachingHttpHeadersFilter;
 import ro.teamnet.bootstrap.web.filter.StaticResourcesProductionFilter;
 import ro.teamnet.bootstrap.web.filter.gzip.GZipServletFilter;
@@ -57,6 +58,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             initStaticResourcesProductionFilter(servletContext, disps);
         }
         initGzipFilter(servletContext, disps);
+        initSecurityAccessFilter(servletContext);
         log.info("Web application fully configured");
     }
 
@@ -197,5 +199,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         protected void analytics() {
             // noop
         }
+    }
+
+    private void initSecurityAccessFilter(ServletContext servletContext){
+        SecurityAccessFilter securityAccessFilter = new SecurityAccessFilter();
+        FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", securityAccessFilter);
+        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
     }
 }

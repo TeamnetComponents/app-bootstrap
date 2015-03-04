@@ -6,10 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import ro.teamnet.bootstrap.domain.Authority;
 import ro.teamnet.bootstrap.domain.Menu;
-import ro.teamnet.bootstrap.repository.AuthorityRepository;
+import ro.teamnet.bootstrap.domain.Role;
 import ro.teamnet.bootstrap.repository.MenuRepository;
+import ro.teamnet.bootstrap.repository.RoleRepository;
 import ro.teamnet.bootstrap.service.MenuService;
 import ro.teamnet.bootstrap.web.rest.dto.MenuDTO;
 import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
@@ -30,7 +30,7 @@ public class MenuResource {
     MenuRepository menuRepository;
 
     @Inject
-    AuthorityRepository authorityRepository;
+    RoleRepository roleRepository;
 
     @RequestMapping(value = "/rest/menu", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -74,7 +74,7 @@ public class MenuResource {
     @RequestMapping(value = "/rest/menu/authorities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity getAuthorities() {
-        List<Authority> auths = authorityRepository.findAll();
+        List<Role> auths = roleRepository.findAll();
         return new ResponseEntity<>(auths, HttpStatus.OK);
     }
 }

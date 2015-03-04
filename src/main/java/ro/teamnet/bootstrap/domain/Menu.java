@@ -41,9 +41,9 @@ public class Menu {
     @JoinTable(
         name = "T_MENU_AUTHORITY",
         joinColumns = {@JoinColumn(name = "menu_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority", referencedColumnName = "name")}
+        inverseJoinColumns = {@JoinColumn(name = "authority", referencedColumnName = "code")}
     )
-    private Set<Authority> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -85,11 +85,11 @@ public class Menu {
         this.cssClass = cssClass;
     }
 
-    public Set<Authority> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Authority> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
