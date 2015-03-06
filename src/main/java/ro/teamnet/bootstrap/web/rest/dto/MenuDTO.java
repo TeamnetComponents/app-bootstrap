@@ -19,7 +19,7 @@ public class MenuDTO {
     private String route;
     private String cssClass;
     private Long sortNo;
-    private Long active;
+    private Boolean active;
     private List<MenuDTO> items = new ArrayList<MenuDTO>();
     private Module module;
 
@@ -39,7 +39,7 @@ public class MenuDTO {
         this.route = menu.getRoute();
         this.cssClass = menu.getCssClass();
         this.sortNo = menu.getSortNo();
-        this.active = menu.getActive();
+        this.active = menu.getActive() == 1;
         this.module = menu.getModule();
     }
 
@@ -79,10 +79,10 @@ public class MenuDTO {
     public void setSortNo(Long sortNo) {
         this.sortNo = sortNo;
     }
-    public Long getActive() {
+    public Boolean getActive() {
         return active;
     }
-    public void setActive(Long active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
     public List<MenuDTO> getItems() {
