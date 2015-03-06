@@ -4,8 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A menu.
@@ -37,13 +35,9 @@ public class Menu {
     @Column(name = "active")
     private Long active;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "T_MENU_AUTHORITY",
-        joinColumns = {@JoinColumn(name = "menu_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority", referencedColumnName = "code")}
-    )
-    private Set<Role> roles = new HashSet<>();
+    @OneToOne (cascade=CascadeType.ALL)
+    @JoinColumn(name="module_id", unique= true, nullable=false, insertable=true, updatable=true)
+    private Module module;
 
     public Long getId() {
         return id;
@@ -85,12 +79,12 @@ public class Menu {
         this.cssClass = cssClass;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Module getModule() {
+        return module;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     public Long getSortNo() {
@@ -116,7 +110,7 @@ public class Menu {
 
         Menu menu = (Menu) o;
 
-        if (roles != null ? !roles.equals(menu.roles) : menu.roles != null) return false;
+        if (module != null ? !module.equals(menu.module) : menu.module != null) return false;
         if (cssClass != null ? !cssClass.equals(menu.cssClass) : menu.cssClass != null) return false;
         if (!id.equals(menu.id)) return false;
         if (name != null ? !name.equals(menu.name) : menu.name != null) return false;
@@ -135,7 +129,7 @@ public class Menu {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (route != null ? route.hashCode() : 0);
         result = 31 * result + (cssClass != null ? cssClass.hashCode() : 0);
-        result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        result = 31 * result + (module != null ? module.hashCode() : 0);
         result = 31 * result + (sortNo != null ? sortNo.hashCode() : 0);
         result = 31 * result + (active != null ? active.hashCode() : 0);
         return result;
@@ -149,7 +143,7 @@ public class Menu {
                 ", label='" + name + '\'' +
                 ", route='" + route + '\'' +
                 ", cssClass='" + cssClass + '\'' +
-                ", authorities=" + roles +
+                ", authorities=" + module +
                 ", sortNo=" + sortNo +
                 ", active=" + active +
                 '}';

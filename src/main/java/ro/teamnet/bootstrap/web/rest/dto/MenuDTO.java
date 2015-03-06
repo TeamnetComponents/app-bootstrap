@@ -1,6 +1,7 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
 import ro.teamnet.bootstrap.domain.Menu;
+import ro.teamnet.bootstrap.domain.Module;
 import ro.teamnet.bootstrap.domain.Role;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class MenuDTO {
     private Long sortNo;
     private Long active;
     private List<MenuDTO> items = new ArrayList<MenuDTO>();
-    private Set<Role> roles = new HashSet<>();
+    private Module module;
 
     public MenuDTO(Menu menu) {
         fetchMenuData(menu);
@@ -37,9 +38,9 @@ public class MenuDTO {
         this.name = menu.getName();
         this.route = menu.getRoute();
         this.cssClass = menu.getCssClass();
-        this.roles = menu.getRoles();
         this.sortNo = menu.getSortNo();
         this.active = menu.getActive();
+        this.module = menu.getModule();
     }
 
     public Long getId() {
@@ -72,12 +73,6 @@ public class MenuDTO {
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
     }
-    public Set<Role> getRoles() {
-        return roles;
-    }
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
     public Long getSortNo() {
         return sortNo;
     }
@@ -95,5 +90,11 @@ public class MenuDTO {
     }
     public void setItems(List<MenuDTO> items) {
         this.items = items;
+    }
+    public Module getModule() {
+        return module;
+    }
+    public void setModule(Module module) {
+        this.module = module;
     }
 }
