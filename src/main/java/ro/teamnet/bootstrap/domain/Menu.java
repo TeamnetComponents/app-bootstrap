@@ -35,7 +35,7 @@ public class Menu {
     @Column(name = "active")
     private Long active;
 
-    @OneToOne (cascade=CascadeType.ALL)
+    @OneToOne (fetch = FetchType.EAGER)
     @JoinColumn(name="module_id", unique= true, nullable=false, insertable=true, updatable=true)
     private Module module;
 
