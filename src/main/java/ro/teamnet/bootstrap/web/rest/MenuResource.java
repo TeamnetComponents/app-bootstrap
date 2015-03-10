@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.domain.Menu;
-import ro.teamnet.bootstrap.domain.Role;
 import ro.teamnet.bootstrap.repository.MenuRepository;
 import ro.teamnet.bootstrap.repository.RoleRepository;
 import ro.teamnet.bootstrap.service.MenuService;
@@ -71,10 +70,9 @@ public class MenuResource {
         }
     }
 
-    @RequestMapping(value = "/rest/menu/authorities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/rest/menu/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity getAuthorities() {
-        List<Role> auths = roleRepository.findAll();
-        return new ResponseEntity<>(auths, HttpStatus.OK);
+    public ResponseEntity getRoles() {
+        return new ResponseEntity<>(roleRepository.findAll(), HttpStatus.OK);
     }
 }
