@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public abstract class AbstractServiceImpl<T extends Serializable> implements AbstractService<T> {
+public abstract class AbstractServiceImpl<T extends Serializable, ID extends Serializable> implements AbstractService<T, ID> {
 
 
          private final Logger log = LoggerFactory.getLogger(AbstractServiceImpl.class);
 
-         private final AppRepository<T,Long> repository;
+         private final AppRepository<T, ID> repository;
 
-         public AbstractServiceImpl(AppRepository<T,Long> repository){
+         public AbstractServiceImpl(AppRepository<T, ID> repository){
            this.repository=repository;
          }
 
@@ -39,7 +39,7 @@ public abstract class AbstractServiceImpl<T extends Serializable> implements Abs
 
 
         @Override
-        public T findOne(Long id){
+        public T findOne(ID id){
             log.debug("REST request to get : {}", id);
             return (T)repository.findOne(id);
         }
@@ -47,7 +47,7 @@ public abstract class AbstractServiceImpl<T extends Serializable> implements Abs
 
         @Override
         @Transactional
-        public void delete(Long id){
+        public void delete(ID id){
             log.debug("REST request to delete : {}", id);
             repository.delete(id);
         }

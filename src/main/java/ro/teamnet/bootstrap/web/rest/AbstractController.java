@@ -12,20 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ro.teamnet.bootstrap.service.AbstractService;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.List;
 
 
-public abstract class AbstractController<T extends Serializable> {
+public abstract class AbstractController<T extends Serializable, ID extends Serializable> {
 
     private final Logger log = LoggerFactory.getLogger(AbstractController.class);
 
 
-    public AbstractService<T> abstractService;
+    public AbstractService<T, ID> abstractService;
 
-    public AbstractController(AbstractService<T> abstractService) {
+    public AbstractController(AbstractService<T, ID> abstractService) {
         this.abstractService = abstractService;
     }
 
@@ -51,7 +50,7 @@ public abstract class AbstractController<T extends Serializable> {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<T> get(@PathVariable Long id, HttpServletResponse response) {
+    public ResponseEntity<T> get(@PathVariable ID id, HttpServletResponse response) {
         log.debug("REST request to get  : {}", id);
         T t = abstractService.findOne(id);
         if (t == null) {
@@ -65,7 +64,7 @@ public abstract class AbstractController<T extends Serializable> {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable ID id) {
         log.debug("REST request to delete : {}", id);
         abstractService.delete(id);
     }
