@@ -27,43 +27,43 @@
         </createTable>
 
         <!-- insert application menus -->
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/menus${file_ext}.csv"
-                  separator=";"
-                  tableName="T_MENU">
-            <column name="activated" type="boolean"/>
-        </loadData>
+        <!--<loadData encoding="UTF-8"-->
+                  <!--file="config/liquibase/menus${file_ext}.csv"-->
+                  <!--separator=";"-->
+                  <!--tableName="T_MENU">-->
+            <!--<column name="activated" type="boolean"/>-->
+        <!--</loadData>-->
 
         <!-- insert menu modules | POSTGRESQL tested only -->
-        <sql>
-            insert into t_module (id_module, version, code, type, description)
-            select
-                nextval('t_module_id_module_seq'),
-                1,
-                upper('MENU_' || me.id),
-                1,
-                name
-            from t_menu me;
-        </sql>
+        <!--<sql>-->
+            <!--insert into t_module (id_module, version, code, type, description)-->
+            <!--select-->
+                <!--nextval('t_module_id_module_seq'),-->
+                <!--1,-->
+                <!--upper('MENU_' || me.id),-->
+                <!--1,-->
+                <!--name-->
+            <!--from t_menu me;-->
+        <!--</sql>-->
 
         <!-- update menu with corresponding module id | POSTGRESQL tested only -->
-        <sql>
-            update t_menu set module_id = (select mo.id_module from t_module mo where mo.code = 'MENU_'||id );
-        </sql>
+        <!--<sql>-->
+            <!--update t_menu set module_id = (select mo.id_module from t_module mo where mo.code = 'MENU_'||id );-->
+        <!--</sql>-->
 
         <!-- update module child parents corresponding to menu child parents | POSTGRESQL tested only -->
-        <sql>
-            update
-                t_module t
-            set
-                fk_parent_module = t3.module_id
-            from
-                t_menu t2, t_menu t3
-            where
-                t.code = 'MENU_'||t2.id
-                and t2.parent_id = t3.id
-                and t.id_module = t2.module_id;
-        </sql>
+        <!--<sql>-->
+            <!--update-->
+                <!--t_module t-->
+            <!--set-->
+                <!--fk_parent_module = t3.module_id-->
+            <!--from-->
+                <!--t_menu t2, t_menu t3-->
+            <!--where-->
+                <!--t.code = 'MENU_'||t2.id-->
+                <!--and t2.parent_id = t3.id-->
+                <!--and t.id_module = t2.module_id;-->
+        <!--</sql>-->
     </changeSet>
 
     <changeSet id="12022015#1" author="bootstrap" dbms="!oracle">
