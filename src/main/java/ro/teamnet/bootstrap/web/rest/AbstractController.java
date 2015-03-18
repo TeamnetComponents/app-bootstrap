@@ -21,7 +21,6 @@ public abstract class AbstractController<T extends Serializable, ID extends Seri
 
     private final Logger log = LoggerFactory.getLogger(AbstractController.class);
 
-
     public AbstractService<T, ID> abstractService;
 
     public AbstractController(AbstractService<T, ID> abstractService) {
@@ -30,18 +29,25 @@ public abstract class AbstractController<T extends Serializable, ID extends Seri
 
     @RequestMapping(method = RequestMethod.POST)
     @Timed
-    public void create(@RequestBody T t) {
+    public ResponseEntity<T> create(@RequestBody T t) {
+        if (!isSaveEnabled()) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
         log.debug("REST request to save : {}", t);
         abstractService.save(t);
+        return new ResponseEntity<>(t, HttpStatus.OK);
     }
 
 
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-        public List<T> getAll() {
+        public ResponseEntity<List<T>> getAll() {
+        if (!isGetAllEnabled()) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
         log.debug("REST request to get all fields");
-        return abstractService.findAll();
+        return new ResponseEntity<>(abstractService.findAll(), HttpStatus.OK);
     }
 
 
@@ -51,6 +57,9 @@ public abstract class AbstractController<T extends Serializable, ID extends Seri
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<T> get(@PathVariable ID id, HttpServletResponse response) {
+        if (!isGetOneEnabled()) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
         log.debug("REST request to get  : {}", id);
         T t = abstractService.findOne(id);
         if (t == null) {
@@ -64,9 +73,28 @@ public abstract class AbstractController<T extends Serializable, ID extends Seri
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable ID id) {
+    public ResponseEntity<T> delete(@PathVariable ID id) {
+        if (!isDeleteEnabled()) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
         log.debug("REST request to delete : {}", id);
         abstractService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public boolean isGetAllEnabled() {
+        return true;
+    }
+
+    public boolean isGetOneEnabled() {
+        return true;
+    }
+
+    public boolean isSaveEnabled() {
+        return true;
+    }
+
+    public boolean isDeleteEnabled() {
+        return true;
+    }
 }
