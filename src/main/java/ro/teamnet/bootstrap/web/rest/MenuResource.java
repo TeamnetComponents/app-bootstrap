@@ -7,9 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.domain.Menu;
-import ro.teamnet.bootstrap.repository.MenuRepository;
-import ro.teamnet.bootstrap.repository.RoleRepository;
 import ro.teamnet.bootstrap.service.MenuService;
+import ro.teamnet.bootstrap.service.RoleService;
 import ro.teamnet.bootstrap.web.rest.dto.MenuDTO;
 import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
 
@@ -26,22 +25,19 @@ public class MenuResource {
     MenuService menuService;
 
     @Inject
-    MenuRepository menuRepository;
-
-    @Inject
-    RoleRepository roleRepository;
+    RoleService roleService;
 
     @RequestMapping(value = "/rest/menu", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity save(@RequestBody Menu menu) {
-        menuRepository.save(menu);
+        menuService.save(menu);
         return new ResponseEntity<>(new MenuDTO(menu), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/rest/menu", method = RequestMethod.DELETE)
     @Timed
     public ResponseEntity delete(@RequestParam("id") Long id) {
-        menuRepository.delete(menuRepository.getById(id));
+        menuService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -73,6 +69,6 @@ public class MenuResource {
     @RequestMapping(value = "/rest/menu/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity getRoles() {
-        return new ResponseEntity<>(roleRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
     }
 }

@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * A menu.
@@ -11,8 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "T_MENU")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Menu {
-
+public class Menu implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
