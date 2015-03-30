@@ -88,7 +88,11 @@ public class DatabaseConfiguration implements EnvironmentAware {
         if (metricRegistry != null) {
             config.setMetricRegistry(metricRegistry);
         }
+        doExtraConfiguration(config);
         return new HikariDataSource(config);
+    }
+
+    protected void doExtraConfiguration(HikariConfig config) {
     }
 
     @Bean
