@@ -8,29 +8,37 @@ import liquibase.integration.spring.SpringLiquibase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ro.teamnet.bootstrap.extend.AppRepositoryFactoryBean;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository", "ro.teamnet.bootstrap.dictionary.repository"}, repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
+@EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository"},
+        repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
-@EntityScan({"ro.teamnet"})
 public class DatabaseConfiguration implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
@@ -61,8 +69,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
     private PersistenceUnitManager persistenceUnitManager;
 
 
-
-    @Bean(destroyMethod = "shutdown")
+    @Bean(name = "dataSource", destroyMethod = "shutdown")
     @ConditionalOnMissingClass(name = "ro.teamnet.renns.config.HerokuDatabaseConfiguration")
     @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
     public DataSource dataSource() {
@@ -70,7 +77,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
         if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
                     "cannot start. Please check your Spring profile, current profiles are: {}",
-                    Arrays.toString(env.getActiveProfiles()));
+                Arrays.toString(env.getActiveProfiles()));
 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
@@ -95,8 +102,8 @@ public class DatabaseConfiguration implements EnvironmentAware {
     protected void doExtraConfiguration(HikariConfig config) {
     }
 
-    @Bean
-    public SpringLiquibase liquibase(DataSource dataSource) {
+    @Bean(name = "liquibase")
+    public SpringLiquibase liquibase(@Qualifier("dataSource") DataSource dataSource) {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath*:config/liquibase/master.xml");
@@ -112,5 +119,31 @@ public class DatabaseConfiguration implements EnvironmentAware {
     @Bean
     public Hibernate4Module hibernate4Module() {
         return new Hibernate4Module();
+    }
+
+    @Bean(name = "entityManagerFactory")
+    @Primary
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+        EntityManagerFactoryBuilder builder) {
+        List<String> entityPackagesToScan = getEntityPackagesToScan();
+        return builder
+            .dataSource(dataSource())
+            .packages(entityPackagesToScan.toArray(new String[entityPackagesToScan.size()]))
+            .persistenceUnit("default")
+            .build();
+    }
+
+    public List<String> getEntityPackagesToScan() {
+        ArrayList<String> entityPackages = new ArrayList<>();
+        entityPackages.add("ro.teamnet.bootstrap");
+        return entityPackages;
+    }
+
+    @Bean(name = "transactionManager")
+    @Primary
+    public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory);
+        jpaTransactionManager.setDataSource(dataSource());
+        return jpaTransactionManager;
     }
 }
