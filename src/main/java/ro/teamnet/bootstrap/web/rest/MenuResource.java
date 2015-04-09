@@ -1,18 +1,21 @@
 package ro.teamnet.bootstrap.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.domain.Menu;
+import ro.teamnet.bootstrap.domain.Role;
 import ro.teamnet.bootstrap.service.MenuService;
 import ro.teamnet.bootstrap.service.RoleService;
 import ro.teamnet.bootstrap.web.rest.dto.MenuDTO;
 import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +27,8 @@ public class MenuResource {
     @Inject
     MenuService menuService;
 
-    @Inject
-    RoleService roleService;
+    @Autowired(required = false)
+    List<RoleService> roleServices;
 
     @RequestMapping(value = "/rest/menu", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -69,6 +72,11 @@ public class MenuResource {
     @RequestMapping(value = "/rest/menu/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity getRoles() {
-        return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
+        List<Role> roles=new ArrayList<>();
+        if(roleServices!=null&&roleServices.size()>0){
+            roles=roleServices.get(0).findAll();
+        }
+
+        return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 }

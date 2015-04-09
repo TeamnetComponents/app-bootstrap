@@ -20,17 +20,6 @@
             <artifactId>app-bootstrap-commons</artifactId>
             <version>0.2-SNAPSHOT</version>
         </dependency>
-		<dependency>
-            <groupId>ro.teamnet.bootstrap</groupId>
-            <artifactId>app-bootstrap-dictionary</artifactId>
-            <version>0.2-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ro.teamnet.bootstrap</groupId>
-            <artifactId>app-bootstrap-security</artifactId>
-            <version>0.2-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
 

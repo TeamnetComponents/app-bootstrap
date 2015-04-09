@@ -3,13 +3,11 @@ package ro.teamnet.bootstrap.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import ro.teamnet.bootstrap.extend.AppFilterHandlerMethodArgumentResolver;
 import ro.teamnet.bootstrap.extend.AppLocaleHandlerMethodArgumentResolver;
 import ro.teamnet.bootstrap.extend.AppPageableHandlerMethodArgumentResolver;
 import ro.teamnet.bootstrap.extend.AppSortHandlerMethodArgumentResolver;
-import ro.teamnet.bootstrap.security.SessionHolder;
+
 
 @Configuration("appMvcConfig")
 public class AppMvcConfig {
@@ -36,11 +34,7 @@ public class AppMvcConfig {
     }
 
 
-    @Bean
-    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public SessionHolder sessionHolder() {
-        return new SessionHolder();
-    }
+
 
 
 }

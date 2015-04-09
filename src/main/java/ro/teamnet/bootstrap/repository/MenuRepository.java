@@ -1,12 +1,10 @@
 package ro.teamnet.bootstrap.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ro.teamnet.bootstrap.domain.Menu;
-import ro.teamnet.bootstrap.domain.Role;
 import ro.teamnet.bootstrap.extend.AppRepository;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package ro.teamnet.bootstrap.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.teamnet.bootstrap.domain.Menu;
@@ -14,14 +15,14 @@ import java.util.List;
 @Transactional
 public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements MenuService {
     private final MenuRepository menuRepository;
-    private final ModuleService moduleService;
+    @Autowired(required = false)
+    private List<ModuleService> moduleServices;
 
     @Inject
-    public MenuServiceImpl(MenuRepository menuRepository, ModuleService moduleService) {
+    public MenuServiceImpl(MenuRepository menuRepository) {
         super(menuRepository);
 
         this.menuRepository = menuRepository;
-        this.moduleService = moduleService;
     }
 
     @Override
@@ -57,7 +58,10 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     public Menu save(Menu menu) {
         if(menu.getId() == null) {
             // add security module when creating new menu only
-            moduleService.save(menu.getModule());
+            if(moduleServices!=null&&moduleServices.size()>0){
+                moduleServices.get(0).save(menu.getModule());
+            }
+
         }
 
         return menuRepository.save(menu);

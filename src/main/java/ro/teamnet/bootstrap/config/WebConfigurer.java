@@ -17,13 +17,12 @@ import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.util.ReflectionUtils;
-import ro.teamnet.bootstrap.security.filter.SecurityAccessFilter;
 import ro.teamnet.bootstrap.web.filter.CachingHttpHeadersFilter;
 import ro.teamnet.bootstrap.web.filter.StaticResourcesProductionFilter;
 import ro.teamnet.bootstrap.web.filter.gzip.GZipServletFilter;
 
 import javax.inject.Inject;
-import javax.servlet.DispatcherType;import javax.servlet.FilterRegistration;import javax.servlet.ServletContext;import javax.servlet.ServletException;import javax.servlet.ServletRegistration;
+import javax.servlet.*;
 import java.lang.Override;import java.lang.String;import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -202,8 +201,18 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     private void initSecurityAccessFilter(ServletContext servletContext){
-        SecurityAccessFilter securityAccessFilter = new SecurityAccessFilter();
-        FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", securityAccessFilter);
-        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+
+        try {
+            Class secClass=Class.forName("ro.teamnet.bootstrap.security.filter.SecurityAccessFilter");
+            Object securityAccessFilter=secClass.newInstance();
+            FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", (Filter)securityAccessFilter);
+            filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        } catch (ClassNotFoundException e) {
+            log.warn("Security feature not enabled!!");
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

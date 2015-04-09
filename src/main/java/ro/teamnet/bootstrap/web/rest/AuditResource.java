@@ -1,6 +1,6 @@
 package ro.teamnet.bootstrap.web.rest;
 
-import ro.teamnet.bootstrap.security.AuthoritiesConstants;
+import ro.teamnet.bootstrap.constants.AuthoritiesConstants;
 import ro.teamnet.bootstrap.service.AuditEventService;
 import ro.teamnet.bootstrap.web.propertyeditors.LocaleDateTimeEditor;
 import org.joda.time.LocalDateTime;

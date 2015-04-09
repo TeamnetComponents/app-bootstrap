@@ -37,7 +37,6 @@ import java.util.List;
 @Configuration
 @EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository"},
         repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
-@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 public class DatabaseConfiguration implements EnvironmentAware {
 
