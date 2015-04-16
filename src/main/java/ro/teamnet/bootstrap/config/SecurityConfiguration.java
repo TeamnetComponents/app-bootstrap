@@ -21,7 +21,7 @@ import javax.inject.Inject;import java.lang.Exception;import java.lang.Override;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public abstract class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Inject
     private Environment env;
