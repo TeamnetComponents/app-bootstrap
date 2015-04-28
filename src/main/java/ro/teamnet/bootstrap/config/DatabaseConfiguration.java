@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
+
 @EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository"},
         repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
@@ -70,7 +69,6 @@ public class DatabaseConfiguration implements EnvironmentAware {
 
 
     @Bean(name = "dataSource", destroyMethod = "shutdown")
-    @ConditionalOnMissingClass(name = "ro.teamnet.renns.config.HerokuDatabaseConfiguration")
     @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
