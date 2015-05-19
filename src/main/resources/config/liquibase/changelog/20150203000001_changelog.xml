@@ -65,42 +65,4 @@
                 <!--and t.id_module = t2.module_id;-->
         <!--</sql>-->
     </changeSet>
-
-    <changeSet id="12022015#1" author="bootstrap" dbms="!oracle">
-        <insert tableName="T_DICTIONARY">
-            <column name="code" value="C_SYSTEM-D_FA"/>
-            <column name="name" value="FontAwesome icon classes"/>
-            <column name="description" value="FontAwesome available icon css classes"/>
-            <column name="collection_id" valueComputed="(select id from T_DICTIONARY_COLLECTION where code ='C_SYSTEM')"/>
-        </insert>
-
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/dictionary_fa_icons${file_ext}.csv"
-                  separator=";"
-                  tableName="T_DICTIONARY_ELEMENT" />
-    </changeSet>
-
-    <changeSet id="12022015#1" author="bootstrap" dbms="oracle">
-        <insert tableName="T_DICTIONARY">
-            <column name="id" valueComputed="HIBERNATE_SEQUENCE.NEXTVAL" />
-            <column name="code" value="C_SYSTEM-D_FA"/>
-            <column name="name" value="FontAwesome icon classes"/>
-            <column name="description" value="FontAwesome available icon css classes"/>
-            <column name="collection_id" valueComputed="(select id from T_DICTIONARY_COLLECTION where code ='C_SYSTEM')"/>
-        </insert>
-
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/dictionary_fa_icons${file_ext}.csv"
-                  separator=";"
-                  tableName="T_DICTIONARY_ELEMENT">
-            <column name="id" type="NUMERIC" />
-        </loadData>
-    </changeSet>
-
-    <changeSet id="20150213" author="bootstrap">
-        <update tableName="T_DICTIONARY_ELEMENT">
-            <column name="dictionary_id" valueComputed="(select id from T_DICTIONARY where code ='C_SYSTEM-D_FA')"/>
-            <where>code like 'C_SYSTEM-D_FA%'</where>
-        </update>
-    </changeSet>
 </databaseChangeLog>
