@@ -35,7 +35,7 @@ public class Menu implements Serializable {
     @Column(name = "active")
     private Long active;
 
-    @OneToOne (fetch = FetchType.EAGER)
+    @OneToOne (fetch = FetchType.LAZY)
     @JoinColumn(name="module_id", unique= true, nullable=false, insertable=true, updatable=true)
     private Module module;
 

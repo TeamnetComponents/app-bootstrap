@@ -6,13 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.teamnet.bootstrap.domain.Menu;
 import ro.teamnet.bootstrap.repository.MenuRepository;
 import ro.teamnet.bootstrap.web.rest.dto.MenuDTO;
+import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements MenuService {
     private final MenuRepository menuRepository;
     @Autowired(required = false)
@@ -36,8 +37,26 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     }
 
     @Override
+    @Transactional
     public void updateMenuPosition(Long id, Long parentId, Long sortNo) {
         menuRepository.updateMenuPosition(id, parentId, sortNo);
+    }
+
+    @Override
+    @Transactional
+    public MenuDTO create(Menu menu) {
+        Menu menu1=save(menu);
+        return new MenuDTO(menu1);
+    }
+
+    @Override
+    @Transactional
+    public void bulkUpdate(List<MenuUpdateDTO> updates) {
+        for(MenuUpdateDTO muDTO: updates) {
+            if(muDTO.getProperty().equals(MenuUpdateDTO.PropertyTypes.SORT_NO.name())) {
+                updateMenuPosition(muDTO.getId(), muDTO.getParentId(), muDTO.getNewSortNo());
+            }
+        }
     }
 
     private List<MenuDTO> traverseMenus(List<Menu> rootMenus) {
@@ -55,6 +74,7 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     }
 
     @Override
+    @Transactional
     public Menu save(Menu menu) {
         if(menu.getId() == null) {
             // add security module when creating new menu only
