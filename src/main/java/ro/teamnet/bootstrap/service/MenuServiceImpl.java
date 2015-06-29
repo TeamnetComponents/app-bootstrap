@@ -1,5 +1,7 @@
 package ro.teamnet.bootstrap.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,6 +22,8 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     @Autowired(required = false)
     private List<ModuleService> moduleServices;
 
+
+    public static final  Log LOG= LogFactory.getLog(MenuServiceImpl.class);
     @Inject
     public MenuServiceImpl(MenuRepository menuRepository) {
         super(menuRepository);
@@ -33,6 +38,7 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
 
     @Override
     public List<MenuDTO> getMenuTreeByParentId(Long parentId) {
+
         return traverseMenus(menuRepository.getMenuByParentId(parentId));
     }
 

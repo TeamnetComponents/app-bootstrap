@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface MenuRepository extends AppRepository<Menu, Long> {
-    @Query("select m from Menu m where m.parentId = :parentId order by m.sortNo")
+    @Query("select m from Menu m join fetch m.module where m.parentId = :parentId order by m.sortNo")
     List<Menu> getMenuByParentId(@Param(value = "parentId") Long parentId);
 
     @Modifying

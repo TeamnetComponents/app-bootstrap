@@ -25,7 +25,7 @@ public class LoggingAspect {
     @Inject
     private Environment env;
 
-    @Pointcut("within(ro.teamnet.bootstrap.repository..*) || within(ro.teamnet.bootstrap.service..*) || within(ro.teamnet.bootstrap.web.rest..*)")
+    @Pointcut("execution(* ro.teamnet..*Service*.*(..)) || execution(* ro.teamnet..*Repository*.*(..)) || execution(* ro.teamnet..*Resource*.*(..))")
     public void loggingPoincut() {}
 
     @AfterThrowing(pointcut = "loggingPoincut()", throwing = "e")
@@ -41,15 +41,15 @@ public class LoggingAspect {
 
     @Around("loggingPoincut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        if (log.isDebugEnabled()) {
-            log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                    joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
-        }
+        long start = System.currentTimeMillis();
         try {
             Object result = joinPoint.proceed();
             if (log.isDebugEnabled()) {
-                log.debug("Exit: {}.{}() with result = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                        joinPoint.getSignature().getName(), result);
+                long elapsedTime = System.currentTimeMillis() - start;
+
+
+                log.debug("Elapsed time for : {}.{} = {}", joinPoint.getSignature().getDeclaringTypeName(),
+                        joinPoint.getSignature().getName(), elapsedTime);
             }
             return result;
         } catch (IllegalArgumentException e) {
