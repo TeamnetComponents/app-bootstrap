@@ -12,7 +12,6 @@ import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
