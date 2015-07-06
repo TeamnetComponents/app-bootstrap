@@ -119,13 +119,20 @@ public class DatabaseConfiguration implements EnvironmentAware {
     @Bean(name = "entityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder) {
+            EntityManagerFactoryBuilder builder,List<JpaPackagesToScan> packagesToScans) {
         List<String> entityPackagesToScan = getEntityPackagesToScan();
-        return builder
-                .dataSource(dataSource())
-                .packages(entityPackagesToScan.toArray(new String[entityPackagesToScan.size()]))
-                .persistenceUnit("default")
-                .build();
+
+
+        EntityManagerFactoryBuilder.Builder entBuild= builder.dataSource(dataSource())
+                .persistenceUnit("default");
+
+        if(packagesToScans!=null&&!packagesToScans.isEmpty()){
+            for (JpaPackagesToScan packagesToScan : packagesToScans) {
+                entityPackagesToScan.addAll(packagesToScan.getPackagesToScan());
+            }
+        }
+        entBuild.packages(entityPackagesToScan.toArray(new String[entityPackagesToScan.size()]));
+        return entBuild.build();
     }
 
     public List<String> getEntityPackagesToScan() {
@@ -141,4 +148,8 @@ public class DatabaseConfiguration implements EnvironmentAware {
         jpaTransactionManager.setDataSource(dataSource());
         return jpaTransactionManager;
     }
+
+
+
+
 }
