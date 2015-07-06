@@ -4,7 +4,6 @@ import com.codahale.metrics.annotation.Timed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ro.teamnet.bootstrap.domain.Menu;
 import ro.teamnet.bootstrap.service.MenuService;
@@ -23,8 +22,6 @@ public class MenuResource extends AbstractResource<Menu,Long>{
 
     private final MenuService menuService;
 
-
-
     @Inject
     public MenuResource(MenuService abstractService) {
         super(abstractService);
@@ -39,10 +36,14 @@ public class MenuResource extends AbstractResource<Menu,Long>{
     @RequestMapping(value = "/dto", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public MenuDTO createMenu(@RequestBody Menu menu) {
-
         return getService().create(menu);
     }
 
+    @RequestMapping(value = "/dto", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public MenuDTO updateMenu(@RequestBody Menu menu) {
+        return getService().create(menu);
+    }
 
 
     @RequestMapping(value = "/children/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,11 +61,8 @@ public class MenuResource extends AbstractResource<Menu,Long>{
     }
 
     @Timed
-    @RequestMapping(value = "/bulkUpdate", method = {RequestMethod.POST})
+    @RequestMapping(value = "/bulkUpdate", method = {RequestMethod.PUT})
     public void bulkMenuUpdate(@RequestBody List<MenuUpdateDTO> updates) {
         menuService.bulkUpdate(updates);
-
     }
-
-
 }

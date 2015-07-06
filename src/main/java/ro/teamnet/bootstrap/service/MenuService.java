@@ -1,7 +1,6 @@
 package ro.teamnet.bootstrap.service;
 
 import ro.teamnet.bootstrap.domain.Menu;
-import ro.teamnet.bootstrap.domain.Role;
 import ro.teamnet.bootstrap.web.rest.dto.MenuDTO;
 import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
 
