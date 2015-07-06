@@ -2,12 +2,9 @@ package ro.teamnet.bootstrap.web.rest.dto;
 
 import ro.teamnet.bootstrap.domain.Menu;
 import ro.teamnet.bootstrap.domain.Module;
-import ro.teamnet.bootstrap.domain.Role;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * A menu DTO.

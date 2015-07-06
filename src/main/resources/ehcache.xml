@@ -21,7 +21,7 @@
            timeToLiveSeconds="3600">
     </cache>
 
-   <cache name="ro.teamnet.bootstrap.domain.Role"
+   <cache name="ro.teamnet.bootstrap.domain.ApplicationRole"
            timeToLiveSeconds="3600">
     </cache>
 
