@@ -137,9 +137,6 @@ public class DatabaseConfiguration implements EnvironmentAware {
                 if(jpaPackagesToScanPlugin.packagesToScan()!=null){
                     entityPackagesToScan.addAll(jpaPackagesToScanPlugin.packagesToScan());
                 }
-                if(jpaPackagesToScanPlugin.packageToScan()!=null){
-                    entityPackagesToScan.add(jpaPackagesToScanPlugin.packageToScan());
-                }
 
             }
         }
