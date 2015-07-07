@@ -16,7 +16,11 @@ import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.util.ReflectionUtils;
+import ro.teamnet.bootstrap.plugin.jpa.JpaPackagesToScanPlugin;
+import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
+import ro.teamnet.bootstrap.web.filter.BootstrapFilterBase;
 import ro.teamnet.bootstrap.web.filter.CachingHttpHeadersFilter;
 import ro.teamnet.bootstrap.web.filter.StaticResourcesProductionFilter;
 import ro.teamnet.bootstrap.web.filter.gzip.GZipServletFilter;
@@ -24,10 +28,7 @@ import ro.teamnet.bootstrap.web.filter.gzip.GZipServletFilter;
 import javax.inject.Inject;
 import javax.servlet.*;
 import java.lang.Override;import java.lang.String;import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -200,11 +201,15 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         }
     }
 
+
     private void initSecurityAccessFilter(ServletContext servletContext){
 
         try {
             Class secClass=Class.forName("ro.teamnet.bootstrap.security.filter.SecurityAccessFilter");
             Object securityAccessFilter=secClass.newInstance();
+
+
+
             FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", (Filter)securityAccessFilter);
             filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         } catch (ClassNotFoundException e) {

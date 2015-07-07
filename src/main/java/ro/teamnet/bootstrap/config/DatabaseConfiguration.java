@@ -19,14 +19,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
+import org.springframework.plugin.core.PluginRegistry;
+import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ro.teamnet.bootstrap.extend.AppRepositoryFactoryBean;
+import ro.teamnet.bootstrap.plugin.jpa.JpaPackagesToScanPlugin;
+import ro.teamnet.bootstrap.plugin.jpa.JpaType;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -38,6 +41,7 @@ import java.util.List;
 @EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository"},
         repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
 @EnableTransactionManagement
+@EnablePluginRegistries({JpaPackagesToScanPlugin.class})
 public class DatabaseConfiguration implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
@@ -119,16 +123,23 @@ public class DatabaseConfiguration implements EnvironmentAware {
     @Bean(name = "entityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder,List<JpaPackagesToScan> packagesToScans) {
+            EntityManagerFactoryBuilder builder,@Qualifier("jpaPackagesToScanPluginRegistry")
+    PluginRegistry<JpaPackagesToScanPlugin,JpaType> jpaPackagesToScanPluginRegistry) {
         List<String> entityPackagesToScan = getEntityPackagesToScan();
 
 
         EntityManagerFactoryBuilder.Builder entBuild= builder.dataSource(dataSource())
                 .persistenceUnit("default");
 
-        if(packagesToScans!=null&&!packagesToScans.isEmpty()){
-            for (JpaPackagesToScan packagesToScan : packagesToScans) {
-                entityPackagesToScan.addAll(packagesToScan.getPackagesToScan());
+        if(jpaPackagesToScanPluginRegistry.hasPluginFor(JpaType.JPA_PACKAGE_TO_SCAN)){
+            for (JpaPackagesToScanPlugin jpaPackagesToScanPlugin : jpaPackagesToScanPluginRegistry.getPluginsFor(JpaType.JPA_PACKAGE_TO_SCAN)) {
+                if(jpaPackagesToScanPlugin.packagesToScan()!=null){
+                    entityPackagesToScan.addAll(jpaPackagesToScanPlugin.packagesToScan());
+                }
+                if(jpaPackagesToScanPlugin.packageToScan()!=null){
+                    entityPackagesToScan.add(jpaPackagesToScanPlugin.packageToScan());
+                }
+
             }
         }
         entBuild.packages(entityPackagesToScan.toArray(new String[entityPackagesToScan.size()]));
