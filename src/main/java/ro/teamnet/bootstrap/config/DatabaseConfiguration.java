@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ro.teamnet.bootstrap.extend.AppRepositoryFactoryBean;
 import ro.teamnet.bootstrap.plugin.jpa.JpaPackagesToScanPlugin;
 import ro.teamnet.bootstrap.plugin.jpa.JpaType;
+import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
