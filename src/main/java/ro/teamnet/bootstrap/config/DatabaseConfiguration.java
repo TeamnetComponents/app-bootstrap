@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ro.teamnet.bootstrap.extend.AppRepositoryFactoryBean;
 import ro.teamnet.bootstrap.plugin.jpa.JpaPackagesToScanPlugin;
 import ro.teamnet.bootstrap.plugin.jpa.JpaType;
-import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -124,17 +123,17 @@ public class DatabaseConfiguration implements EnvironmentAware {
     @Bean(name = "entityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder builder,@Qualifier("jpaPackagesToScanPluginRegistry")
-    PluginRegistry<JpaPackagesToScanPlugin,JpaType> jpaPackagesToScanPluginRegistry) {
+            EntityManagerFactoryBuilder builder, @Qualifier("jpaPackagesToScanPluginRegistry")
+    PluginRegistry<JpaPackagesToScanPlugin, JpaType> jpaPackagesToScanPluginRegistry) {
         List<String> entityPackagesToScan = getEntityPackagesToScan();
 
 
-        EntityManagerFactoryBuilder.Builder entBuild= builder.dataSource(dataSource())
+        EntityManagerFactoryBuilder.Builder entBuild = builder.dataSource(dataSource())
                 .persistenceUnit("default");
 
-        if(jpaPackagesToScanPluginRegistry.hasPluginFor(JpaType.JPA_PACKAGE_TO_SCAN)){
+        if (jpaPackagesToScanPluginRegistry.hasPluginFor(JpaType.JPA_PACKAGE_TO_SCAN)) {
             for (JpaPackagesToScanPlugin jpaPackagesToScanPlugin : jpaPackagesToScanPluginRegistry.getPluginsFor(JpaType.JPA_PACKAGE_TO_SCAN)) {
-                if(jpaPackagesToScanPlugin.packagesToScan()!=null){
+                if (jpaPackagesToScanPlugin.packagesToScan() != null) {
                     entityPackagesToScan.addAll(jpaPackagesToScanPlugin.packagesToScan());
                 }
 
@@ -157,8 +156,6 @@ public class DatabaseConfiguration implements EnvironmentAware {
         jpaTransactionManager.setDataSource(dataSource());
         return jpaTransactionManager;
     }
-
-
 
 
 }
