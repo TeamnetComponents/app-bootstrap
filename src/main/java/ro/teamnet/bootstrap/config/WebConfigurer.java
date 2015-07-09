@@ -9,6 +9,7 @@ import org.atmosphere.cpr.AtmosphereServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -16,9 +17,9 @@ import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.plugin.core.config.EnablePluginRegistries;
+import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.util.ReflectionUtils;
-import ro.teamnet.bootstrap.plugin.jpa.JpaPackagesToScanPlugin;
+import ro.teamnet.bootstrap.plugin.security.SecurityType;
 import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
 import ro.teamnet.bootstrap.web.filter.BootstrapFilterBase;
 import ro.teamnet.bootstrap.web.filter.CachingHttpHeadersFilter;
@@ -27,8 +28,11 @@ import ro.teamnet.bootstrap.web.filter.gzip.GZipServletFilter;
 
 import javax.inject.Inject;
 import javax.servlet.*;
-import java.lang.Override;import java.lang.String;import java.lang.reflect.Field;
+import java.lang.reflect.Field;
 import java.util.*;
+
+import static ro.teamnet.bootstrap.plugin.security.SecurityType.DEFAULT_USER_AUTHORIZATION;
+import static ro.teamnet.bootstrap.plugin.security.SecurityType.USER_AUTHORIZATION;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -44,6 +48,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     @Autowired(required = false)
     private MetricRegistry metricRegistry;
+
+    @Inject
+    @Qualifier("userAuthorizationPluginRegistry")
+    private PluginRegistry<UserAuthorizationPlugin, SecurityType> userAuthorizationPluginRegistry;
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -201,16 +209,17 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         }
     }
 
-
-    private void initSecurityAccessFilter(ServletContext servletContext){
+    private void initSecurityAccessFilter(ServletContext servletContext) {
 
         try {
-            Class secClass=Class.forName("ro.teamnet.bootstrap.security.filter.SecurityAccessFilter");
-            Object securityAccessFilter=secClass.newInstance();
+            Class secClass = Class.forName("ro.teamnet.bootstrap.security.filter.SecurityAccessFilter");
+            BootstrapFilterBase securityAccessFilter = (BootstrapFilterBase) secClass.newInstance();
 
+            List<UserAuthorizationPlugin> userAuthorizationPlugins = userAuthorizationPluginRegistry.getPluginsFor(
+                    USER_AUTHORIZATION, userAuthorizationPluginRegistry.getPluginsFor(DEFAULT_USER_AUTHORIZATION));
+            securityAccessFilter.addAll(userAuthorizationPlugins);
 
-
-            FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", (Filter)securityAccessFilter);
+            FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", securityAccessFilter);
             filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         } catch (ClassNotFoundException e) {
             log.warn("Security feature not enabled!!");
