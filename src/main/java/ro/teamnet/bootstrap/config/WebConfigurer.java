@@ -31,7 +31,6 @@ import javax.servlet.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static ro.teamnet.bootstrap.plugin.security.SecurityType.DEFAULT_USER_AUTHORIZATION;
 import static ro.teamnet.bootstrap.plugin.security.SecurityType.USER_AUTHORIZATION;
 
 /**
@@ -215,8 +214,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             Class secClass = Class.forName("ro.teamnet.bootstrap.security.filter.SecurityAccessFilter");
             BootstrapFilterBase securityAccessFilter = (BootstrapFilterBase) secClass.newInstance();
 
-            List<UserAuthorizationPlugin> userAuthorizationPlugins = userAuthorizationPluginRegistry.getPluginsFor(
-                    USER_AUTHORIZATION, userAuthorizationPluginRegistry.getPluginsFor(DEFAULT_USER_AUTHORIZATION));
+            List<UserAuthorizationPlugin> userAuthorizationPlugins = userAuthorizationPluginRegistry.getPluginsFor(USER_AUTHORIZATION);
             securityAccessFilter.addAll(userAuthorizationPlugins);
 
             FilterRegistration filterRegistration = servletContext.addFilter("HttpInterceptor", securityAccessFilter);
