@@ -39,13 +39,19 @@ public class MenuResource extends AbstractResource<Menu,Long>{
         return getService().create(menu);
     }
 
+    @RequestMapping(value = "/dto", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity deleteMenu(@RequestParam Long id) {
+        getService().delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "/dto", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public MenuDTO updateMenu(@RequestBody Menu menu) {
         return getService().create(menu);
     }
-
-
     @RequestMapping(value = "/children/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity getMenu(@PathVariable Long id) {
