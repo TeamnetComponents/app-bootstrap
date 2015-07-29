@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ro.teamnet.bootstrap.plugin.jpa.JpaType.DEFAULT_JPA_PACKAGE_TO_SCAN;
+import static ro.teamnet.bootstrap.plugin.jpa.JpaType.JPA_PACKAGE_TO_SCAN;
+
 @Configuration
 @EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository"},
         repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)
@@ -127,18 +130,17 @@ public class DatabaseConfiguration implements EnvironmentAware {
     PluginRegistry<JpaPackagesToScanPlugin, JpaType> jpaPackagesToScanPluginRegistry) {
         List<String> entityPackagesToScan = getEntityPackagesToScan();
 
-
         EntityManagerFactoryBuilder.Builder entBuild = builder.dataSource(dataSource())
                 .persistenceUnit("default");
 
-        if (jpaPackagesToScanPluginRegistry.hasPluginFor(JpaType.JPA_PACKAGE_TO_SCAN)) {
-            for (JpaPackagesToScanPlugin jpaPackagesToScanPlugin : jpaPackagesToScanPluginRegistry.getPluginsFor(JpaType.JPA_PACKAGE_TO_SCAN)) {
-                if (jpaPackagesToScanPlugin.packagesToScan() != null) {
-                    entityPackagesToScan.addAll(jpaPackagesToScanPlugin.packagesToScan());
-                }
-
+        List<JpaPackagesToScanPlugin> jpaPackagesToScanPlugins = jpaPackagesToScanPluginRegistry.getPluginsFor(
+                JPA_PACKAGE_TO_SCAN, jpaPackagesToScanPluginRegistry.getPluginsFor(DEFAULT_JPA_PACKAGE_TO_SCAN));
+        for (JpaPackagesToScanPlugin jpaPackagesToScanPlugin : jpaPackagesToScanPlugins) {
+            if (jpaPackagesToScanPlugin.packagesToScan() != null) {
+                entityPackagesToScan.addAll(jpaPackagesToScanPlugin.packagesToScan());
             }
         }
+
         entBuild.packages(entityPackagesToScan.toArray(new String[entityPackagesToScan.size()]));
         return entBuild.build();
     }
