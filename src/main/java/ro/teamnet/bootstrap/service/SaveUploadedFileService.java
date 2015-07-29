@@ -10,5 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface SaveUploadedFileService {
 
-    public String saveFile(MultipartFile file);
+    /**
+     * Metoda prin care se salveaza un fisier pe sistemul de fisiere al server-ului.
+     *
+     * @param file Continutul fisierului care trebuie incarcat.
+     * @return Un mesaj prin care se specifica daca fisierul a fost incarcat sau nu.
+     */
+    String saveFile(MultipartFile file);
 }

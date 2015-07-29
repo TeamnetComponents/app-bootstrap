@@ -40,6 +40,11 @@ public class SaveUploadedFileServiceImpl implements  SaveUploadedFileService {
         }
     }
 
+    /**
+     * Metoda prin care se creeaza un director pe sistemul de fisiere al server-ului.
+     * @return Referinta catre director.
+     * @throws Exception
+     */
     private File createDirectory() throws Exception{
 
         String rootPath = System.getProperty("user.dir");
@@ -51,6 +56,14 @@ public class SaveUploadedFileServiceImpl implements  SaveUploadedFileService {
         return dir;
     }
 
+    /**
+     * Metoda prin care se creeaza un fisier pe sistemul de fisiere al server-ului.
+     *
+     * @param dir Directorul in care se va crea fisierul.
+     * @param file Fisierul care se va crea pe sistemul de fisiere al server-ului.
+     * @return Calea absoluta a fisierului.
+     * @throws Exception
+     */
     private String createFile(File dir, MultipartFile file ) throws Exception{
 
         byte[] bytes = file.getBytes();
