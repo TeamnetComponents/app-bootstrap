@@ -10,15 +10,9 @@
     <property name="activated" value="true" dbms="postgresql"/>
     <property name="activated" value="1" dbms="oracle"/>
 
-    <changeSet id="00000000000000" author="bootstrap" dbms="postgresql">
+    <changeSet id="00000000000000" author="bootstrap">
         <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
     </changeSet>
-
-    <changeSet id="00000000000000" author="bootstrap" dbms="oracle">
-        <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
-    </changeSet>
-
-
 
     <!--
         JHipster core tables.
