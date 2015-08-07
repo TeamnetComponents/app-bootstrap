@@ -18,9 +18,11 @@ import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.plugin.core.PluginRegistry;
+import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.util.ReflectionUtils;
 import ro.teamnet.bootstrap.plugin.security.SecurityType;
 import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
+import ro.teamnet.bootstrap.plugin.security.UserDetailsPlugin;
 import ro.teamnet.bootstrap.web.filter.BootstrapFilterBase;
 import ro.teamnet.bootstrap.web.filter.CachingHttpHeadersFilter;
 import ro.teamnet.bootstrap.web.filter.StaticResourcesProductionFilter;
@@ -38,6 +40,7 @@ import static ro.teamnet.bootstrap.plugin.security.SecurityType.USER_AUTHORIZATI
  */
 @Configuration
 @AutoConfigureAfter(CacheConfiguration.class)
+@EnablePluginRegistries({UserAuthorizationPlugin.class})
 public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
