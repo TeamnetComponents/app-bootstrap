@@ -28,10 +28,20 @@ public class AuditEventService {
     @Inject
     private AuditEventConverter auditEventConverter;
 
+    /**
+     * Load all audited events from database.
+     * @return a list of AuditEvent objects.
+     */
     public List<AuditEvent> findAll() {
         return auditEventConverter.convertToAuditEvent(persistenceAuditEventRepository.findAll());
     }
 
+    /**
+     * Load all audited events from database within a given interval.
+     * @param fromDate - start date
+     * @param toDate - end date
+     * @return a list of AuditEvent objects.
+     */
     public List<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate) {
         final List<PersistentAuditEvent> persistentAuditEvents =
                 persistenceAuditEventRepository.findByDates(fromDate, toDate);

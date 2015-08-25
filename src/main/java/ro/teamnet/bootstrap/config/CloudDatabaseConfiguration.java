@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
+/**
+ * Spring configuration class.
+ * This class will initialize data source bean used by Spring.
+ */
 @Configuration
 @Profile(Constants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {

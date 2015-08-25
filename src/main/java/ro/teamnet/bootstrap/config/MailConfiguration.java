@@ -11,6 +11,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+/**
+ * Spring configuration class.
+ * This class will initialize mail configuration beans used by Spring.
+ */
 @Configuration
 public class MailConfiguration implements EnvironmentAware {
 

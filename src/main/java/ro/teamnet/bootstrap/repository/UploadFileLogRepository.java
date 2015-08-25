@@ -7,7 +7,7 @@ import ro.teamnet.bootstrap.domain.UploadFileLog;
 import ro.teamnet.bootstrap.extend.AppRepository;
 
 /**
- * Created by Radu.Hoaghe on 7/16/2015.
+ * @author Radu.Hoaghe
  */
 public interface UploadFileLogRepository extends AppRepository<UploadFileLog, Long> {
 

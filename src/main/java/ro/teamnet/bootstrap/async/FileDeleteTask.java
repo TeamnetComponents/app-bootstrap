@@ -7,10 +7,10 @@ import ro.teamnet.bootstrap.service.UploadFileLogService;
 import javax.inject.Inject;
 
 /**
- * Created by Radu.Hoaghe on 7/28/2015.
+ * Task used to delete outdated files on the server filesystem.
+ * It runs every 10 minutes and delete all files that meet the above mentioned condition.
  *
- * Task folosit pentru stergerea fisierelor expirate de pe sistemul de fisiere al serverului.
- * Acesta ruleaza o data la 10 minute si sterge toate fisierele care indeplinesc conditia mentionata anterior.
+ * @author Radu.Hoaghe
  */
 @Component
 public class FileDeleteTask {

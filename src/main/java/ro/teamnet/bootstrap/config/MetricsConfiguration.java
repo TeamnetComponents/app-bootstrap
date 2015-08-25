@@ -24,6 +24,9 @@ import java.lang.management.ManagementFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Spring configuration class.
+ */
 @Configuration
 @EnableMetrics(proxyTargetClass = true)
 @Profile("!" + Constants.SPRING_PROFILE_FAST)

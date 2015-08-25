@@ -22,6 +22,10 @@ import javax.persistence.metamodel.EntityType;
 import java.util.Set;
 import java.util.SortedSet;
 
+/**
+ * Spring configuration class.
+ * This class will initialize caching beans used by Spring.
+ */
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(value = {MetricsConfiguration.class, DatabaseConfiguration.class})

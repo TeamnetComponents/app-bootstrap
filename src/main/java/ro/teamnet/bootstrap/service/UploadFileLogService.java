@@ -2,7 +2,7 @@ package ro.teamnet.bootstrap.service;
 
 
 /**
- * Created by cristian.uricec on 3/17/2015.
+ * @author cristian.uricec
  */
 public interface UploadFileLogService {
 

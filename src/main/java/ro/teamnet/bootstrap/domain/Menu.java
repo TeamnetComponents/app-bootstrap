@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A menu.
+ * Entity used for application menu configuration.
  */
 @Entity
 @Table(name = "T_MENU")

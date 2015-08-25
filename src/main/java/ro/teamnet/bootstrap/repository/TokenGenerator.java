@@ -1,7 +1,7 @@
 package ro.teamnet.bootstrap.repository;
 
 /**
- * Created by cristian.uricec on 3/16/2015.
+ * @author cristian.uricec
  */
 import java.math.BigInteger;
 import java.security.SecureRandom;

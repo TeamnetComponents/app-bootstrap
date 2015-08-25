@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by Radu.Hoaghe on 7/20/2015.
+ * Spring configuration class.
  */
 @Configuration
 @EnableCaching

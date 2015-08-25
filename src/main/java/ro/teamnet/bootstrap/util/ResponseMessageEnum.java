@@ -1,10 +1,10 @@
 package ro.teamnet.bootstrap.util;
 
 /**
- * Created by Radu.Hoaghe on 7/28/2015.
- *
  * Enum folosit pentru stocarea mesajelor care trebuiesc returnate in raspuns in urma unui request de tip POST
  * prin care se trimite tokenul aferent unui fisier uploadat pe server.
+ *
+ * @author Radu.Hoaghe
  */
 public enum ResponseMessageEnum {
     FILE_NOT_FOUND_ON_SERVER("file not found on server's file system"),

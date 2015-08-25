@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by Radu.Hoaghe on 7/23/2015.
+ * @author Radu.Hoaghe
  */
 @Entity
 @Table(name = "T_SAVED_FILE_DETAILS")

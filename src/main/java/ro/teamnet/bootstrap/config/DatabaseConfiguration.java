@@ -40,6 +40,10 @@ import java.util.List;
 import static ro.teamnet.bootstrap.plugin.jpa.JpaType.DEFAULT_JPA_PACKAGE_TO_SCAN;
 import static ro.teamnet.bootstrap.plugin.jpa.JpaType.JPA_PACKAGE_TO_SCAN;
 
+/**
+ * Spring configuration class.
+ * This class will initialize data configuration beans used by Spring.
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = {"ro.teamnet.bootstrap.repository"},
         repositoryFactoryBeanClass = AppRepositoryFactoryBean.class)

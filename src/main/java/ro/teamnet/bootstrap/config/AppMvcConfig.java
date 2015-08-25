@@ -8,13 +8,15 @@ import ro.teamnet.bootstrap.extend.AppLocaleHandlerMethodArgumentResolver;
 import ro.teamnet.bootstrap.extend.AppPageableHandlerMethodArgumentResolver;
 import ro.teamnet.bootstrap.extend.AppSortHandlerMethodArgumentResolver;
 
-
+/**
+ * Spring configuration class.
+ * This class will initialize MVC beans used by Spring.
+ */
 @Configuration("appMvcConfig")
 public class AppMvcConfig {
 
     @Bean
     public AppPageableHandlerMethodArgumentResolver pageableResolver() {
-        System.out.println("");
         return new AppPageableHandlerMethodArgumentResolver(appSortResolver(), appFilterPlusResolver(), appLocaleResolver());
     }
 

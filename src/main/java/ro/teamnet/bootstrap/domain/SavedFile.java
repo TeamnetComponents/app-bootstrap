@@ -1,12 +1,17 @@
 package ro.teamnet.bootstrap.domain;
 
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import java.sql.Blob;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
- * Created by Radu.Hoaghe on 7/23/2015.
+ * Entity used for saved files.
+ *
+ * @author Radu.Hoaghe
  */
 @Entity
 @Table(name = "T_SAVED_FILE")

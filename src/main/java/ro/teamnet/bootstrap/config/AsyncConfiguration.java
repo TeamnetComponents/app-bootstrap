@@ -19,6 +19,10 @@ import java.util.concurrent.Executor;
 
 import ro.teamnet.bootstrap.async.ExceptionHandlingAsyncTaskExecutor;
 
+/**
+ * Spring configuration class.
+ * This class will initialize async executor used by Spring.
+ */
 @Configuration
 @EnableAsync
 @EnableScheduling
