@@ -5,11 +5,13 @@ package ro.teamnet.bootstrap.repository;
  */
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Date;
 
 public final class TokenGenerator {
     private SecureRandom random = new SecureRandom();
 
     public String nextSessionId() {
+
         return new BigInteger(130, random).toString(32);
     }
 }

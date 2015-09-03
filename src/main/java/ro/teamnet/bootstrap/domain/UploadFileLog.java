@@ -1,6 +1,7 @@
 package ro.teamnet.bootstrap.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "T_UPLOAD_FILE_LOG")
-public class UploadFileLog {
+public class UploadFileLog implements Serializable{
 
     @Id
     @Column(name = "id_upload_file_log")
@@ -57,5 +58,9 @@ public class UploadFileLog {
 
     public long getStatus() {
         return status;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

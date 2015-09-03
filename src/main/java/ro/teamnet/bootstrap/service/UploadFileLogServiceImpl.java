@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.teamnet.bootstrap.domain.UploadFileLog;
+
+import ro.teamnet.bootstrap.extend.AppRepository;
 import ro.teamnet.bootstrap.repository.TokenGenerator;
 import ro.teamnet.bootstrap.repository.UploadFileLogRepository;
 import ro.teamnet.bootstrap.web.rest.dto.UploadFileLogDTO;
@@ -18,15 +20,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by cristian.uricec on 3/17/2015.
  */
 @Service
-public class UploadFileLogServiceImpl implements UploadFileLogService {
+public class UploadFileLogServiceImpl extends AbstractServiceImpl<UploadFileLog,Long> implements UploadFileLogService {
 
-    @Inject
+
+    public static final String TOKENS = "tokens";
+    public static final int EXP_MIN = 3;
+    public static final long DEF_STATUS = 0l;
     private UploadFileLogRepository uploadFileLogRepository;
 
     private TokenGenerator tokenGenerator = new TokenGenerator();
 
-    @Inject
-    private SavedFileService savedFileService;
+
 
     /**
      * Un {@link ConcurrentHashMap} care retine perechi de cheie-valoare continand in cheie token-ul aferent unui fisier
@@ -36,6 +40,13 @@ public class UploadFileLogServiceImpl implements UploadFileLogService {
     @Qualifier("tokens")
     private Map<String, Object> tokensCache;
 
+    @Inject
+    public UploadFileLogServiceImpl(UploadFileLogRepository uploadFileLogRepository) {
+        super(uploadFileLogRepository);
+        this.uploadFileLogRepository=uploadFileLogRepository;
+
+    }
+
     @Transactional
     @Override
     public String saveInUploadLog(String filePath) throws Exception {
@@ -44,12 +55,13 @@ public class UploadFileLogServiceImpl implements UploadFileLogService {
         uploadFileLog.setFileLocation(filePath);
         uploadFileLog.setToken(tokenGenerator.nextSessionId());
         uploadFileLog.setUploadDate(new Date());
-        uploadFileLog.setStatus(0l);
+        uploadFileLog.setStatus(DEF_STATUS);
         uploadFileLogRepository.save(uploadFileLog);
 
         DateTime expiringDate = new DateTime();
-        expiringDate = expiringDate.plusMinutes(3);
-        ((ConcurrentHashMap) tokensCache.get("tokens")).put(uploadFileLog.getToken(), // se adauga in Map-ul care retine toti tokenii
+        expiringDate = expiringDate.plusMinutes(EXP_MIN);
+        //noinspection unchecked
+        ((ConcurrentHashMap) tokensCache.get(TOKENS)).put(uploadFileLog.getToken(), // se adauga in Map-ul care retine toti tokenii
                 new UploadFileLogDTO(filePath, expiringDate));
 
         return uploadFileLog.getToken();
@@ -60,12 +72,12 @@ public class UploadFileLogServiceImpl implements UploadFileLogService {
     public void deleteExpiredFiles() {
 
         List<String> listOfTokensToBeDeleted = new ArrayList<>();
-        for(Object entry : ((ConcurrentHashMap) tokensCache.get("tokens")).keySet()){
+        for(Object entry : ((ConcurrentHashMap) tokensCache.get(TOKENS)).keySet()){
 
             String token = (String) entry;
 
             UploadFileLogDTO uploadFileLogDTO = (UploadFileLogDTO)
-                    ((ConcurrentHashMap) tokensCache.get("tokens")).get(token);
+                    ((ConcurrentHashMap) tokensCache.get(TOKENS)).get(token);
 
             if(uploadFileLogDTO.getExpiringDate().isBeforeNow()){
                 listOfTokensToBeDeleted.add(token);
@@ -74,7 +86,7 @@ public class UploadFileLogServiceImpl implements UploadFileLogService {
         }
 
         for(String token : listOfTokensToBeDeleted){
-            ((ConcurrentHashMap) tokensCache.get("tokens")).remove(token);
+            ((ConcurrentHashMap) tokensCache.get(TOKENS)).remove(token);
         }
     }
 
@@ -86,7 +98,7 @@ public class UploadFileLogServiceImpl implements UploadFileLogService {
      * @return {@code true} in cazul in care fisierul a fost sters de pe sistemul de fisiere al server-ului sau
      *         {@code false} in caz contrar.
      */
-    private boolean deleteFile(String path, String token) {
+    public boolean deleteFile(String path, String token) {
         File file = new File(path);
         if(file.exists()){
             if(file.delete()){
@@ -96,4 +108,10 @@ public class UploadFileLogServiceImpl implements UploadFileLogService {
         }
         return false;
     }
+
+    public UploadFileLog findByToken(String token){
+        return uploadFileLogRepository.findByToken(token);
+    }
+
+
 }

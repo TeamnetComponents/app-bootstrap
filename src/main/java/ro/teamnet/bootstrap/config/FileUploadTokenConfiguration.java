@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FileUploadTokenConfiguration {
 
     @Bean
-    @Scope(value = "singleton")
     @Qualifier("tokens")
     public Map<String, Object> tokens(){
         return new ConcurrentHashMap<>();

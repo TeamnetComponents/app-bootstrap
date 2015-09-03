@@ -1,10 +1,12 @@
 package ro.teamnet.bootstrap.service;
 
 
+import ro.teamnet.bootstrap.domain.UploadFileLog;
+
 /**
  * @author cristian.uricec
  */
-public interface UploadFileLogService {
+public interface UploadFileLogService extends AbstractService<UploadFileLog,Long>{
 
     /**
      * Metoda prin care se salveaza fisierul intr-o tabela de log si prin care se genereaza un token
@@ -22,5 +24,9 @@ public interface UploadFileLogService {
      * aferent acestora a expirat. Aceasta metoda este apelata o data la 10 minute.
      */
     void deleteExpiredFiles();
+
+    boolean deleteFile(String path, String token);
+
+    UploadFileLog findByToken(String token);
 
 }

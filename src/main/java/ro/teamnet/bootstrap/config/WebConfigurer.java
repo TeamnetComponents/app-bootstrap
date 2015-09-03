@@ -22,7 +22,7 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.util.ReflectionUtils;
 import ro.teamnet.bootstrap.plugin.security.SecurityType;
 import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
-import ro.teamnet.bootstrap.plugin.security.UserDetailsPlugin;
+import ro.teamnet.bootstrap.plugin.upload.FileServicePlugin;
 import ro.teamnet.bootstrap.web.filter.BootstrapFilterBase;
 import ro.teamnet.bootstrap.web.filter.CachingHttpHeadersFilter;
 import ro.teamnet.bootstrap.web.filter.StaticResourcesProductionFilter;
@@ -40,7 +40,7 @@ import static ro.teamnet.bootstrap.plugin.security.SecurityType.USER_AUTHORIZATI
  */
 @Configuration
 @AutoConfigureAfter(CacheConfiguration.class)
-@EnablePluginRegistries({UserAuthorizationPlugin.class})
+@EnablePluginRegistries({UserAuthorizationPlugin.class, FileServicePlugin.class})
 public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
@@ -97,6 +97,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.json");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
+
         compressingFilter.addMappingForUrlPatterns(disps, true, "/app/rest/*");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
         compressingFilter.setAsyncSupported(true);
