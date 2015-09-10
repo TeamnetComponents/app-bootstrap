@@ -28,8 +28,8 @@
     </distributionManagement>
 
     <scm>
-        <url>http://git-components.teamnet.ro/summary/components%2Fjava%2Fapp-boostrap.git</url>
-        <connection>scm:git:ssh://oana.mihai@git-components.teamnet.ro:29418/components/java/app-boostrap.git</connection>
+        <url>http://git-components.teamnet.ro/summary/components%2Fjava%2Fapp-bootstrap.git</url>
+        <connection>scm:git:ssh://oana.mihai@git-components.teamnet.ro:29418/components/java/app-bootstrap.git</connection>
         <tag>HEAD</tag>
     </scm>
 
