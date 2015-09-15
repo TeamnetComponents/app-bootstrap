@@ -67,4 +67,11 @@ public class SavedFileDetails {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
+    @PrePersist
+    private void prePersist() {
+        if (getCreatedDate() == null) {
+            setCreatedDate(new Date());
+        }
+    }
 }

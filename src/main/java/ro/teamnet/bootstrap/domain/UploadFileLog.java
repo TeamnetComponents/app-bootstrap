@@ -63,4 +63,11 @@ public class UploadFileLog implements Serializable{
     public Long getId() {
         return id;
     }
+
+    @PrePersist
+    private void prePersist() {
+        if (getUploadDate() == null) {
+            setUploadDate(new Date());
+        }
+    }
 }
