@@ -21,7 +21,7 @@
             </column>
             <column name="file_name" type="varchar(255)"/>
             <column name="file_type" type="varchar(255)"/>
-            <column name="created_date" type="timestamp" defaultValue="now()"/>
+            <column name="created_date" type="timestamp"/>
             <column name="fk_saved_file" type="bigint">
                 <constraints nullable="false"/>
             </column>

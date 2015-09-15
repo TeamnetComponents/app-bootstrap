@@ -15,7 +15,7 @@
             </column>
             <column name="file_location" type="varchar(255)"/>
             <column name="token" type="varchar(100)"/>
-            <column name="upload_date" type="timestamp" defaultValue="now()"/>
+            <column name="upload_date" type="timestamp"/>
             <column name="status" type="bigint"/>
         </createTable>
 
