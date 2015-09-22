@@ -1,8 +1,6 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
 public class MenuUpdateDTO {
-    public static enum PropertyTypes { SORT_NO };
-
     private Long id;
     private Long parentId;
     private String property;

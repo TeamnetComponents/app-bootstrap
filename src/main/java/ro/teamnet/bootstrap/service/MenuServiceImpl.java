@@ -9,6 +9,7 @@ import ro.teamnet.bootstrap.domain.Menu;
 import ro.teamnet.bootstrap.repository.MenuRepository;
 import ro.teamnet.bootstrap.web.rest.dto.MenuDTO;
 import ro.teamnet.bootstrap.web.rest.dto.MenuUpdateDTO;
+import ro.teamnet.bootstrap.web.rest.dto.PropertyTypes;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     @Transactional
     public void bulkUpdate(List<MenuUpdateDTO> updates) {
         for(MenuUpdateDTO muDTO: updates) {
-            if(muDTO.getProperty().equals(MenuUpdateDTO.PropertyTypes.SORT_NO.name())) {
+            if(muDTO.getProperty().equals(PropertyTypes.SORT_NO.name())) {
                 updateMenuPosition(muDTO.getId(), muDTO.getParentId(), muDTO.getNewSortNo());
             }
         }

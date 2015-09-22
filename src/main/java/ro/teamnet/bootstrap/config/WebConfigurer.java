@@ -63,10 +63,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             initMetrics(servletContext, disps);
         }
         initAtmosphereServlet(servletContext);
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+//        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
             initStaticResourcesProductionFilter(servletContext, disps);
-        }
+//        }
         initGzipFilter(servletContext, disps);
         initSecurityAccessFilter(servletContext);
         log.info("Web application fully configured");
@@ -121,6 +121,14 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/views/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/bower_components/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/json/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/app/cfg/app.json");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "*.json");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "*.js");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "*.css");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "*.html");
         staticResourcesProductionFilter.setAsyncSupported(true);
     }
 
@@ -138,6 +146,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "*.json");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/views/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
     }
 
