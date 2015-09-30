@@ -17,8 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.inject.Inject;
 import javax.servlet.Servlet;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 @Configuration
 @ConditionalOnWebApplication
@@ -35,13 +33,13 @@ public class BootstrapWebMvcAutoConfig extends WebMvcAutoConfiguration.WebMvcAut
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             //detecting path for app-bootstrap-web resources
-            try {
-                String currentPath=URLDecoder.decode(BootstrapWebMvcAutoConfig.class.getClassLoader().getResource("/").getPath(), "UTF-8");
-                System.out.println(currentPath);
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                String currentPath=URLDecoder.decode(BootstrapWebMvcAutoConfig.class.getClassLoader().getResource("/").getPath(), "UTF-8");
+//                System.out.println(currentPath);
+//
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
         }
         super.addResourceHandlers(registry);
     }
