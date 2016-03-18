@@ -5,10 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <property name="now" value="now()" dbms="mysql,h2"/>
-    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="current_timestamp" dbms="postgresql,mssql"/>
     <property name="now" value="sysdate" dbms="oracle"/>
 
-    <changeSet id="230720151" author="bootstrap">
+    <changeSet id="230720151" author="bootstrap" dbms="!mssql">
         <createTable tableName="T_SAVED_FILE">
             <column name="id_saved_file" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -17,6 +17,31 @@
         </createTable>
         <createTable tableName="T_SAVED_FILE_DETAILS">
             <column name="id_saved_file_details" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar(255)"/>
+            <column name="file_type" type="varchar(255)"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="fk_saved_file" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="fk_saved_file" baseTableName="T_SAVED_FILE_DETAILS"
+                                 constraintName="fk_saved_file" deferrable="false" initiallyDeferred="false"
+                                 onDelete="RESTRICT" onUpdate="NO ACTION" referencedColumnNames="id_saved_file"
+                                 referencedTableName="T_SAVED_FILE"/>
+
+    </changeSet>
+
+    <changeSet id="230720151#mssql" author="bootstrap" dbms="mssql">
+        <createTable tableName="T_SAVED_FILE">
+            <column name="id_saved_file" type="bigint" autoIncrement="false">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="blob"/>
+        </createTable>
+        <createTable tableName="T_SAVED_FILE_DETAILS">
+            <column name="id_saved_file_details" type="bigint" autoIncrement="false">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="file_name" type="varchar(255)"/>
