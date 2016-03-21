@@ -101,6 +101,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
         ret.setPassword(propertyResolver.getProperty("password"));
         ret.setDriverClassName(propertyResolver.getProperty("driverClassName"));
         ret.setMinIdle(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
+        ret.setInitialSize(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
         ret.setMaxIdle(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
         ret.setMinEvictableIdleTimeMillis(Integer.parseInt(propertyResolver.getProperty("minEvictableIdleTime")));
         ret.setMaxConnLifetimeMillis(Integer.parseInt(propertyResolver.getProperty("maxLifeTime")));
