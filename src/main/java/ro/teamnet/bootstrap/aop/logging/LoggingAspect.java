@@ -17,7 +17,7 @@ import java.util.Arrays;
 /**
  * Aspect for logging execution of service and repository Spring components.
  */
-@Aspect
+//@Aspect
 public class LoggingAspect {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -25,10 +25,10 @@ public class LoggingAspect {
     @Inject
     private Environment env;
 
-    @Pointcut("execution(* ro.teamnet..*Service*.*(..)) || execution(* ro.teamnet..*Repository*.*(..)) || execution(* ro.teamnet..*Resource*.*(..))")
+//    @Pointcut("execution(* ro.teamnet..*Service*.*(..)) || execution(* ro.teamnet..*Repository*.*(..)) || execution(* ro.teamnet..*Resource*.*(..))")
     public void loggingPoincut() {}
 
-    @AfterThrowing(pointcut = "loggingPoincut()", throwing = "e")
+//    @AfterThrowing(pointcut = "loggingPoincut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
@@ -39,7 +39,7 @@ public class LoggingAspect {
         }
     }
 
-    @Around("loggingPoincut()")
+//    @Around("loggingPoincut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         try {
