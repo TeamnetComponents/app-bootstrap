@@ -106,6 +106,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
         ret.setMinEvictableIdleTimeMillis(Integer.parseInt(propertyResolver.getProperty("minEvictableIdleTime")));
         ret.setMaxConnLifetimeMillis(Integer.parseInt(propertyResolver.getProperty("maxLifeTime")));
         ret.setMaxWaitMillis(Integer.parseInt(propertyResolver.getProperty("maxWaitTime")));
+        ret.setMaxTotal(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
         return ret;
     }
 

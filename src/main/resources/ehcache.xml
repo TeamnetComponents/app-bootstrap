@@ -44,4 +44,13 @@
     <cache name="ro.teamnet.bootstrap.domain.Account.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
+
+    <cache name="perspectives"
+           timeToLiveSeconds="3600" >
+    </cache>
+    <cache name="organizations"
+           timeToLiveSeconds="600" >
+    </cache>
+
+
 </ehcache>
