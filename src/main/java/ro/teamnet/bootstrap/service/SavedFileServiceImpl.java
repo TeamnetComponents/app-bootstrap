@@ -66,7 +66,7 @@ public class SavedFileServiceImpl implements SavedFileService {
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public String saveUploadedFileToDB(String token){
 
         String filePath = getUploadedFileByToken(token);
@@ -110,7 +110,7 @@ public class SavedFileServiceImpl implements SavedFileService {
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public boolean deleteFile(String path, String token) {
         File file = new File(path);
         if(file.exists()){

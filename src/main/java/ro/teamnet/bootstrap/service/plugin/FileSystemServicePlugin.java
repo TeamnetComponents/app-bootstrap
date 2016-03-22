@@ -46,7 +46,7 @@ public class FileSystemServicePlugin implements FileServicePlugin {
 
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public String uploadFile(MultipartFile file,String groupId) {
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
 
@@ -88,7 +88,7 @@ public class FileSystemServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public FileMaster getFilesForGroup(String groupId) {
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster =null;
@@ -177,7 +177,7 @@ public class FileSystemServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Serializable save(Serializable entity, String groupId, BaseFileService baseFileService) {
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster =getFilesForGroup(localGroupId);
@@ -189,7 +189,7 @@ public class FileSystemServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional
+    @Transactional(value="transactionManager")
     public Serializable update(Serializable entity, String groupId, BaseFileService baseFileService) {
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster =getFilesForGroup(localGroupId);
@@ -214,7 +214,7 @@ public class FileSystemServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(value="transactionManager", readOnly = true)
     public FileItem downloadFile(String token, String groupId) {
 
         //finding file in user session
@@ -238,7 +238,7 @@ public class FileSystemServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(value="transactionManager", readOnly = true)
     public List<FileItem> getAllFiles(Long fileMasterId) {
         return fileItemRepository.findByMasterId(fileMasterId);
     }
