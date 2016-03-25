@@ -4,7 +4,7 @@
          name="CM1"
          updateCheck="false"
 
-         maxBytesLocalHeap="500M">
+         maxBytesLocalHeap="650M"	>
 
     <!--
       This is a default configuration, it is re-configured by the CacheConfiguration Spring Bean, using the
@@ -14,9 +14,12 @@
     <diskStore path="java.io.tmpdir"/>
 
     <defaultCache
-            eternal="false"
-            overflowToDisk="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="3600"
+            copyOnRead="true"
+            copyOnWrite="true"
     />
+
 
     <cache name="ro.teamnet.bootstrap.domain.User"
            timeToLiveSeconds="3600">
@@ -40,45 +43,24 @@
 
 
     <cache name="perspectives"
-           maxBytesLocalHeap="100M"
-           maxEntriesLocalDisk="1000"
-           eternal="false"
-           overflowToDisk="true"
-           diskPersistent="true"
            timeToIdleSeconds="3600"
-           copyOnWrite="true"
+           timeToLiveSeconds="3600"
            copyOnRead="true"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off"
-           timeToLiveSeconds="3600">
+           copyOnWrite="true">
     </cache>
 
     <cache name="organizations"
-           maxBytesLocalHeap="100M"
-           maxEntriesLocalDisk="1000"
-           eternal="false"
-           overflowToDisk="true"
-           diskPersistent="true"
-           timeToIdleSeconds="600"
-           copyOnWrite="true"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
            copyOnRead="true"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off"
-           timeToLiveSeconds="600">
+           copyOnWrite="true">
     </cache>
 
     <cache name="accountsExt"
-           maxBytesLocalHeap="100M"
-           maxEntriesLocalDisk="1000"
-           eternal="false"
-           overflowToDisk="true"
-           diskPersistent="true"
            timeToIdleSeconds="3600"
-           copyOnWrite="true"
+           timeToLiveSeconds="3600"
            copyOnRead="true"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off"
-           timeToLiveSeconds="3600">
+           copyOnWrite="true">
     </cache>
 
 </ehcache>
