@@ -52,5 +52,9 @@
            timeToLiveSeconds="600" >
     </cache>
 
+    <cache name="accountsExt"
+           timeToLiveSeconds="3600" >
+    </cache>
+
 
 </ehcache>
