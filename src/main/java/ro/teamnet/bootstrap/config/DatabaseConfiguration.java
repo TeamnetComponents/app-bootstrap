@@ -130,7 +130,6 @@ public class DatabaseConfiguration implements EnvironmentAware {
     }
 
     @Bean(name = "entityManagerFactory")
-    @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder builder, @Qualifier("jpaPackagesToScanPluginRegistry")
     PluginRegistry<JpaPackagesToScanPlugin, JpaType> jpaPackagesToScanPluginRegistry) {
@@ -157,8 +156,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
         return entityPackages;
     }
 
-    @Bean(name = "transactionManager")
-    @Primary
+    @Bean(name = "jpaTransactionManager")
     public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory);
         jpaTransactionManager.setDataSource(dataSource());

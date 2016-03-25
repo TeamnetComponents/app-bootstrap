@@ -102,7 +102,7 @@ public class SessionFileServicePlugin implements FileServicePlugin {
         }
     }
 
-    @Transactional(value="transactionManager")
+    @Transactional(value="jpaTransactionManager")
     public Serializable save(Serializable entity,String groupId,BaseFileService baseFileService){
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster =getFilesForGroup(localGroupId);
@@ -113,7 +113,7 @@ public class SessionFileServicePlugin implements FileServicePlugin {
         return entity;
 
     }
-    @Transactional(value="transactionManager")
+    @Transactional(value="jpaTransactionManager")
     public Serializable update(Serializable entity,String groupId,BaseFileService baseFileService){
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster =getFilesForGroup(localGroupId);
@@ -139,7 +139,7 @@ public class SessionFileServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional(value="transactionManager", readOnly = true)
+    @Transactional(value="jpaTransactionManager", readOnly = true)
     public FileItem downloadFile(String token, String groupId) {
 
         //finding file in user session
@@ -157,7 +157,7 @@ public class SessionFileServicePlugin implements FileServicePlugin {
     }
 
     @Override
-    @Transactional(value="transactionManager", readOnly = true)
+    @Transactional(value="jpaTransactionManager", readOnly = true)
     public List<FileItem> getAllFiles(Long fileMasterId) {
         return fileItemRepository.findByMasterId(fileMasterId);
     }

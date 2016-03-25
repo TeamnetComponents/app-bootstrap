@@ -19,7 +19,7 @@ import java.util.List;
  * </p>
  */
 @Service
-@Transactional(value="transactionManager")
+@Transactional(value="jpaTransactionManager")
 public class AuditEventService {
 
     @Inject
