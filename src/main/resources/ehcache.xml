@@ -3,7 +3,8 @@
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
          name="CM1"
          updateCheck="false"
-         maxBytesLocalHeap="16M">
+
+         maxBytesLocalHeap="500M">
 
     <!--
       This is a default configuration, it is re-configured by the CacheConfiguration Spring Bean, using the
@@ -15,25 +16,17 @@
     <defaultCache
             eternal="false"
             overflowToDisk="false"
-            />
+    />
 
-    <cache name="ro.teamnet.bootstrap.domain.Account"
+    <cache name="ro.teamnet.bootstrap.domain.User"
            timeToLiveSeconds="3600">
     </cache>
 
-   <cache name="ro.teamnet.bootstrap.domain.ApplicationRole"
+    <cache name="ro.teamnet.bootstrap.domain.Authority"
            timeToLiveSeconds="3600">
     </cache>
 
-    <cache name="ro.teamnet.bootstrap.domain.ModuleRight"
-           timeToLiveSeconds="3600">
-    </cache>
-
-    <cache name="ro.teamnet.bootstrap.domain.Module"
-           timeToLiveSeconds="3600">
-    </cache>
-
-    <cache name="ro.teamnet.bootstrap.domain.Account.roles"
+    <cache name="ro.teamnet.bootstrap.domain.User.authorities"
            timeToLiveSeconds="3600">
     </cache>
 
@@ -41,20 +34,51 @@
            timeToLiveSeconds="3600">
     </cache>
 
-    <cache name="ro.teamnet.bootstrap.domain.Account.persistentTokens"
+    <cache name="ro.teamnet.bootstrap.domain.User.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
 
+
     <cache name="perspectives"
-           timeToLiveSeconds="3600" >
+           maxBytesLocalHeap="100M"
+           maxEntriesLocalDisk="1000"
+           eternal="false"
+           overflowToDisk="true"
+           diskPersistent="true"
+           timeToIdleSeconds="3600"
+           copyOnWrite="true"
+           copyOnRead="true"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off"
+           timeToLiveSeconds="3600">
     </cache>
+
     <cache name="organizations"
-           timeToLiveSeconds="600" >
+           maxBytesLocalHeap="100M"
+           maxEntriesLocalDisk="1000"
+           eternal="false"
+           overflowToDisk="true"
+           diskPersistent="true"
+           timeToIdleSeconds="600"
+           copyOnWrite="true"
+           copyOnRead="true"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off"
+           timeToLiveSeconds="600">
     </cache>
 
     <cache name="accountsExt"
-           timeToLiveSeconds="3600" >
+           maxBytesLocalHeap="100M"
+           maxEntriesLocalDisk="1000"
+           eternal="false"
+           overflowToDisk="true"
+           diskPersistent="true"
+           timeToIdleSeconds="3600"
+           copyOnWrite="true"
+           copyOnRead="true"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off"
+           timeToLiveSeconds="3600">
     </cache>
-
 
 </ehcache>
