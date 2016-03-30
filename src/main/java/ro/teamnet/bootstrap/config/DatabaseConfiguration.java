@@ -100,13 +100,19 @@ public class DatabaseConfiguration implements EnvironmentAware {
         ret.setUsername(propertyResolver.getProperty("username"));
         ret.setPassword(propertyResolver.getProperty("password"));
         ret.setDriverClassName(propertyResolver.getProperty("driverClassName"));
-        ret.setMinIdle(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
+
         ret.setInitialSize(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
+        ret.setMinIdle(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
         ret.setMaxIdle(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
-        ret.setMinEvictableIdleTimeMillis(Integer.parseInt(propertyResolver.getProperty("minEvictableIdleTime")));
+        ret.setMaxTotal(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
+
+        ret.setRemoveAbandonedTimeout(Integer.parseInt(propertyResolver.getProperty("removeTimeout")));
+        ret.setRemoveAbandonedOnBorrow(Boolean.valueOf(propertyResolver.getProperty("removeAbandoned")));
+        ret.setRemoveAbandonedOnMaintenance(Boolean.valueOf(propertyResolver.getProperty("removeAbandoned")));
+        ret.setLogAbandoned(Boolean.valueOf(propertyResolver.getProperty("logAbandoned")));
+
         ret.setMaxConnLifetimeMillis(Integer.parseInt(propertyResolver.getProperty("maxLifeTime")));
         ret.setMaxWaitMillis(Integer.parseInt(propertyResolver.getProperty("maxWaitTime")));
-        ret.setMaxTotal(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
         return ret;
     }
 
