@@ -25,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("unchecked")
 @Service
-public class SessionFileServicePlugin implements FileServicePlugin {
+public class SessionFileServicePlugin extends AbsrtractFileServicePlugin {
 
     @Inject
     private SessionHolder sessionHolder;
@@ -39,27 +39,14 @@ public class SessionFileServicePlugin implements FileServicePlugin {
     private FileMasterRepository fileMasterRepository;
 
 
-
-
     @Override
-    public String uploadFile(MultipartFile multipartFile,String groupId) {
-        String token="";
-        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
+    public String uploadFile(MultipartFile multipartFile, String groupId) {
+        String token = "";
+        String localGroupId = FileUploadServiceUtil.getGroupFor(groupId);
         try {
-            token=tokenGenerator.nextSessionId();
+            token = tokenGenerator.nextSessionId();
             FileItem fileItem = FileItem.from(multipartFile, token);
-            FileMaster fileMaster;
-            if(sessionHolder.get(localGroupId)==null){
-                fileMaster =new FileMaster();
-                fileMaster.setGroup(groupId);
-                fileMaster.setFileItem(new CopyOnWriteArrayList<FileItem>());
-                sessionHolder.put(localGroupId, fileMaster);
-            }else{
-                fileMaster = (FileMaster) sessionHolder.get(localGroupId);
-                if(fileMaster.getFileItem()==null){
-                    fileMaster.setFileItem(new CopyOnWriteArrayList<FileItem>());
-                }
-            }
+            FileMaster fileMaster = getFileMaster(groupId, localGroupId);
             fileItem.setFileMaster(fileMaster);
             fileMaster.getFileItem().add(fileItem);
 
@@ -69,73 +56,38 @@ public class SessionFileServicePlugin implements FileServicePlugin {
         return token;
     }
 
+
+
     @Override
     public FileMaster getFilesForGroup(String groupId) {
 
-        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
-        if(sessionHolder.containsKey(localGroupId)){
+        String localGroupId = FileUploadServiceUtil.getGroupFor(groupId);
+        if (sessionHolder.containsKey(localGroupId)) {
             return (FileMaster) sessionHolder.get(localGroupId);
-        }else{
+        } else {
             return null;
         }
 
     }
 
 
-
     @Override
     public void cleanUpForGroup(String groupId) {
-        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
+        String localGroupId = FileUploadServiceUtil.getGroupFor(groupId);
         sessionHolder.remove(localGroupId);
     }
 
     @Override
-    public void cleanUp(String token,String groupId){
-        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
+    public void cleanUp(String token, String groupId) {
+        String localGroupId = FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster = (FileMaster) sessionHolder.get(localGroupId);
         List<FileItem> fileItems = fileMaster.getFileItem();
         for (FileItem fileItem : fileItems) {
-            if(fileItem.getToken().equals(token)){
+            if (fileItem.getToken().equals(token)) {
                 fileItems.remove(fileItem);
                 return;
             }
         }
-    }
-
-    @Transactional
-    public Serializable save(Serializable entity,String groupId,BaseFileService baseFileService){
-        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
-        FileMaster fileMaster =getFilesForGroup(localGroupId);
-        fileMaster.setCreated(new Date());
-        FileMasterReflection.setFileMasterValue(entity, fileMaster);
-        baseFileService.save(entity);
-        cleanUpForGroup(groupId);
-        return entity;
-
-    }
-    @Transactional
-    public Serializable update(Serializable entity,String groupId,BaseFileService baseFileService){
-        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
-        FileMaster fileMaster =getFilesForGroup(localGroupId);
-        FileMaster fileMasterFromDb=fileMasterRepository.findOne(FileMasterReflection.getFileMasterValue(entity).getId());
-        FileMasterReflection.setFileMasterValue(entity,fileMasterFromDb);
-        if(fileMaster==null){
-            baseFileService.save(entity);
-        }else{
-            List<FileItem> persistedFileItems=new ArrayList<>();
-            if(fileMaster.getFileItem()!=null){
-                for (FileItem ff : fileMaster.getFileItem()) {
-                    ff.setFileMaster(fileMasterFromDb);
-                }
-                persistedFileItems=fileItemRepository.save(fileMaster.getFileItem());
-            }
-            FileMasterReflection.updateFileMasterWithFiles(entity, persistedFileItems);
-            baseFileService.save(entity);
-            cleanUpForGroup(groupId);
-        }
-
-        return entity;
-
     }
 
     @Override
@@ -143,28 +95,24 @@ public class SessionFileServicePlugin implements FileServicePlugin {
     public FileItem downloadFile(String token, String groupId) {
 
         //finding file in user session
-        FileMaster fileMaster=getFilesForGroup(groupId);
-        if(fileMaster!=null){
+        FileMaster fileMaster = getFilesForGroup(groupId);
+        if (fileMaster != null) {
             for (FileItem fileItem : fileMaster.getFileItem()) {
-                if(fileItem.getToken().equals(token)){
+                if (fileItem.getToken().equals(token)) {
                     return fileItem;
                 }
             }
         }
 
         //finding file in repository
-        return fileItemRepository.findByTokenAndGroup(token,groupId);
+        return fileItemRepository.findByTokenAndGroup(token, groupId);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<FileItem> getAllFiles(Long fileMasterId) {
-        return fileItemRepository.findByMasterId(fileMasterId);
-    }
+
 
 
     @Override
     public boolean supports(FileUploadType delimiter) {
-        return delimiter==FileUploadType.USER_SESSION;
+        return delimiter == FileUploadType.USER_SESSION;
     }
 }
