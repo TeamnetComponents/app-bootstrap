@@ -11,7 +11,7 @@
 
     <artifactId>app-bootstrap</artifactId>
     <name>app-bootstrap</name>
-    <version>0.2.15-SNAPSHOT</version>
+    <version>0.2.15</version>
     <packaging>jar</packaging>
 
     <repositories>
@@ -38,7 +38,7 @@
     <scm>
         <url>http://git-components.teamnet.ro/summary/components%2Fjava%2Fapp-bootstrap.git</url>
         <connection>scm:git:http://component-publisher@git-components.teamnet.ro/r/components/java/app-bootstrap.git</connection>
-        <tag>HEAD</tag>
+        <tag>v0.2.15</tag>
     </scm>
 
 	<dependencies>
