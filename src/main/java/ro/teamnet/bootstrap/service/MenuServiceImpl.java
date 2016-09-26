@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional(value="jpaTransactionManager", readOnly = true)
 public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements MenuService {
     private final MenuRepository menuRepository;
     @Autowired(required = false)
@@ -43,20 +43,20 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     }
 
     @Override
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void updateMenuPosition(Long id, Long parentId, Long sortNo) {
         menuRepository.updateMenuPosition(id, parentId, sortNo);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public MenuDTO create(Menu menu) {
         Menu menu1=save(menu);
         return new MenuDTO(menu1);
     }
 
     @Override
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public void bulkUpdate(List<MenuUpdateDTO> updates) {
         for(MenuUpdateDTO muDTO: updates) {
             if(muDTO.getProperty().equals(PropertyTypes.SORT_NO.name())) {
@@ -80,7 +80,7 @@ public class MenuServiceImpl extends AbstractServiceImpl<Menu, Long> implements 
     }
 
     @Override
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public Menu save(Menu menu) {
         if(menu.getId() == null) {
             // add security module when creating new menu only

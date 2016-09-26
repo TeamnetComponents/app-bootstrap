@@ -47,7 +47,7 @@ public class UploadFileLogServiceImpl extends AbstractServiceImpl<UploadFileLog,
 
     }
 
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     @Override
     public String saveInUploadLog(String filePath) throws Exception {
 
@@ -67,7 +67,7 @@ public class UploadFileLogServiceImpl extends AbstractServiceImpl<UploadFileLog,
         return uploadFileLog.getToken();
     }
 
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     @Override
     public void deleteExpiredFiles() {
 

@@ -28,12 +28,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("unchecked")
 @Service
-public class FileSystemServicePlugin extends AbsrtractFileServicePlugin {
+public class FileSystemServicePlugin implements FileServicePlugin {
 
     private final Logger log = LoggerFactory.getLogger(FileSystemServicePlugin.class);
 
     @Inject
     private UploadFileLogService uploadFileLogService;
+
+    @Inject
+    private SessionHolder sessionHolder;
 
     @Inject
     private FileItemRepository fileItemRepository;
@@ -43,7 +46,7 @@ public class FileSystemServicePlugin extends AbsrtractFileServicePlugin {
 
 
     @Override
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public String uploadFile(MultipartFile file,String groupId) {
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
 
@@ -53,7 +56,20 @@ public class FileSystemServicePlugin extends AbsrtractFileServicePlugin {
                 String absolutePath = createFile(dir,file);
 
                 String token= uploadFileLogService.saveInUploadLog(absolutePath);
-                FileMaster fileMaster = getFileMaster(groupId, localGroupId);
+                FileMaster fileMaster;
+                if(sessionHolder.containsKey(localGroupId)){
+                    fileMaster =(FileMaster)sessionHolder.get(localGroupId);
+                    if(fileMaster.getFileItem()==null){
+                        fileMaster.setFileItem(new CopyOnWriteArrayList<FileItem>());
+                    }
+
+
+                }else{
+                    fileMaster =new FileMaster();
+                    fileMaster.setGroup(groupId);
+                    fileMaster.setFileItem(new CopyOnWriteArrayList<FileItem>());
+                    sessionHolder.put(localGroupId, fileMaster);
+                }
 
                 FileItem fileItem =new FileItem();
                 fileItem.setToken(token);
@@ -72,7 +88,7 @@ public class FileSystemServicePlugin extends AbsrtractFileServicePlugin {
     }
 
     @Override
-    @Transactional
+    @Transactional(value="jpaTransactionManager")
     public FileMaster getFilesForGroup(String groupId) {
         String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
         FileMaster fileMaster =null;
@@ -161,7 +177,44 @@ public class FileSystemServicePlugin extends AbsrtractFileServicePlugin {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(value="jpaTransactionManager")
+    public Serializable save(Serializable entity, String groupId, BaseFileService baseFileService) {
+        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
+        FileMaster fileMaster =getFilesForGroup(localGroupId);
+        fileMaster.setCreated(new Date());
+        FileMasterReflection.setFileMasterValue(entity, fileMaster);
+        baseFileService.save(entity);
+        cleanUpForGroup(groupId);
+        return entity;
+    }
+
+    @Override
+    @Transactional(value="jpaTransactionManager")
+    public Serializable update(Serializable entity, String groupId, BaseFileService baseFileService) {
+        String localGroupId=FileUploadServiceUtil.getGroupFor(groupId);
+        FileMaster fileMaster =getFilesForGroup(localGroupId);
+        FileMaster fileMasterFromDb=fileMasterRepository.findOne(FileMasterReflection.getFileMasterValue(entity).getId());
+        FileMasterReflection.setFileMasterValue(entity,fileMasterFromDb);
+        if(fileMaster==null){
+            baseFileService.save(entity);
+        }else{
+            List<FileItem> persistedFileItems=new ArrayList<>();
+            if(fileMaster.getFileItem()!=null){
+                for (FileItem ff : fileMaster.getFileItem()) {
+                    ff.setFileMaster(fileMasterFromDb);
+                }
+                persistedFileItems=fileItemRepository.save(fileMaster.getFileItem());
+            }
+            FileMasterReflection.updateFileMasterWithFiles(entity, persistedFileItems);
+            baseFileService.save(entity);
+            cleanUpForGroup(groupId);
+        }
+        return entity;
+
+    }
+
+    @Override
+    @Transactional(value="jpaTransactionManager", readOnly = true)
     public FileItem downloadFile(String token, String groupId) {
 
         //finding file in user session
@@ -184,7 +237,11 @@ public class FileSystemServicePlugin extends AbsrtractFileServicePlugin {
         return fileItemRepository.findByTokenAndGroup(token,groupId);
     }
 
-
+    @Override
+    @Transactional(value="jpaTransactionManager", readOnly = true)
+    public List<FileItem> getAllFiles(Long fileMasterId) {
+        return fileItemRepository.findByMasterId(fileMasterId);
+    }
 
 
     /**

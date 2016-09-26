@@ -5,23 +5,92 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <property name="now" value="now()" dbms="mysql,h2"/>
-    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="current_timestamp" dbms="postgresql,mssql"/>
     <property name="now" value="sysdate" dbms="oracle"/>
     <property name="activated" value="true" dbms="postgresql"/>
-    <property name="activated" value="1" dbms="oracle"/>
+    <property name="activated" value="1" dbms="oracle,mssql"/>
 
-    <changeSet id="00000000000000" author="bootstrap">
+    <changeSet id="00000000000000" author="bootstrap" dbms="!mssql">
         <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="00000000000000#mssql" author="bootstrap" dbms="mssql">
+        <sql>if not exists(select * from sys.objects where object_id = object_id(N'HIBERNATE_SEQUENCE') and type = 'SO')
+                create sequence HIBERNATE_SEQUENCE start with 1 increment by 1</sql>
+
+        <!--<preConditions>
+            <sqlCheck expectedResult="0">
+                if object_id (N'hibernate_sequence_table', N'U') is not null
+                select 1 as res else select 0 as res;
+            </sqlCheck>
+        </preConditions>
+
+        <createTable tableName="T_HIBERNATE_SEQUENCE">
+            <column name="seq" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="dummy" type="varchar(1)"/>
+        </createTable>
+
+        <sql>
+            create procedure hibernate_sequence_procedure as
+            insert into T_HIBERNATE_SEQUENCE values('h'); go
+        </sql>-->
+
     </changeSet>
 
     <!--
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
-    <changeSet id="00000000000001" author="bootstrap" failOnError="true">
+    <changeSet id="00000000000001" author="bootstrap" failOnError="true" dbms="!mssql">
 
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
             <column name="event_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="principal" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="event_date" type="timestamp"/>
+            <column name="event_type" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
+            <column name="event_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="varchar(255)"/>
+        </createTable>
+        <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
+
+        <createIndex indexName="idx_pers_audit_event"
+                     tableName="T_PERSISTENT_AUDIT_EVENT"
+                     unique="false">
+            <column name="principal" type="varchar(255)"/>
+            <column name="event_date" type="timestamp"/>
+        </createIndex>
+
+        <createIndex indexName="idx_pers_audit_event_data"
+                     tableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                     unique="false">
+            <column name="event_id" type="bigint"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                                 constraintName="FK_ev_pers_aud_ev_data"
+                                 referencedColumnNames="event_id"
+                                 referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
+    </changeSet>
+
+    <changeSet id="00000000000001#mssql" author="bootstrap" failOnError="true" dbms="mssql">
+
+        <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
+            <column name="event_id" type="bigint" autoIncrement="false">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(255)">

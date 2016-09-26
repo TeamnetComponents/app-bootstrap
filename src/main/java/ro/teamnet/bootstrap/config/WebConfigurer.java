@@ -20,6 +20,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.util.ReflectionUtils;
+import ro.teamnet.bootstrap.config.session.SessionListener;
 import ro.teamnet.bootstrap.plugin.security.SecurityType;
 import ro.teamnet.bootstrap.plugin.security.UserAuthorizationPlugin;
 import ro.teamnet.bootstrap.plugin.upload.FileServicePlugin;
@@ -67,6 +68,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             initCachingHttpHeadersFilter(servletContext, disps);
             initStaticResourcesProductionFilter(servletContext, disps);
 //        }
+        servletContext.addListener(new SessionListener(-1));
         initGzipFilter(servletContext, disps);
         initSecurityAccessFilter(servletContext);
         log.info("Web application fully configured");
