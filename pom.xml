@@ -11,7 +11,7 @@
 
     <artifactId>app-bootstrap</artifactId>
     <name>app-bootstrap</name>
-    <version>0.2.15</version>
+    <version>0.2.16-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <repositories>
