@@ -5,8 +5,6 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
-import org.apache.commons.dbcp2.BasicDataSource;
-import net.sourceforge.jtds.jdbcx.JtdsDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,40 +78,34 @@ public class DatabaseConfiguration implements EnvironmentAware {
     @Autowired(required = false)
     private PersistenceUnitManager persistenceUnitManager;
 
-    // JTDS driver
-    /*@Bean(name = "dataSource")
+
+    @Bean(name = "dataSource", destroyMethod = "shutdown")
+    @ConditionalOnMissingClass(name = "ro.teamnet.renns.config.HerokuDatabaseConfiguration")
+    @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
     public DataSource dataSource() {
-        JtdsDataSource ret = new JtdsDataSource();
-        ret.setUser(propertyResolver.getProperty("username"));
-        ret.setPassword(propertyResolver.getProperty("password"));
-        ret.setServerName(propertyResolver.getProperty("serverName"));
-        ret.setPortNumber(Integer.parseInt(propertyResolver.getProperty("portNumber")));
-        ret.setDatabaseName(propertyResolver.getProperty("databaseName"));
-        return ret;
-    }*/
+        log.debug("Configuring Datasource");
+        if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
+            log.error("Your database connection pool configuration is incorrect! The application" +
+                            "cannot start. Please check your Spring profile, current profiles are: {}",
+                    Arrays.toString(env.getActiveProfiles()));
 
-    // MS JDBC driver
-    @Bean(name = "dataSource", destroyMethod = "close")
-    public DataSource dataSource() {
-        BasicDataSource ret = new BasicDataSource();
-        ret.setUrl(propertyResolver.getProperty("url"));
-        ret.setUsername(propertyResolver.getProperty("username"));
-        ret.setPassword(propertyResolver.getProperty("password"));
-        ret.setDriverClassName(propertyResolver.getProperty("driverClassName"));
+            throw new ApplicationContextException("Database connection pool is not configured correctly");
+        }
+        HikariConfig config = new HikariConfig();
+        config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
+        if (propertyResolver.getProperty("url") == null || "".equals(propertyResolver.getProperty("url"))) {
+            config.addDataSourceProperty("databaseName", propertyResolver.getProperty("databaseName"));
+            config.addDataSourceProperty("serverName", propertyResolver.getProperty("serverName"));
+        } else {
+            config.addDataSourceProperty("url", propertyResolver.getProperty("url"));
+        }
+        config.addDataSourceProperty("user", propertyResolver.getProperty("username"));
+        config.addDataSourceProperty("password", propertyResolver.getProperty("password"));
 
-        ret.setInitialSize(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
-        ret.setMinIdle(Integer.parseInt(propertyResolver.getProperty("minIdleConnections")));
-        ret.setMaxIdle(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
-        ret.setMaxTotal(Integer.parseInt(propertyResolver.getProperty("maxIdleConnections")));
-
-        ret.setRemoveAbandonedTimeout(Integer.parseInt(propertyResolver.getProperty("removeTimeout")));
-        ret.setRemoveAbandonedOnBorrow(Boolean.valueOf(propertyResolver.getProperty("removeAbandoned")));
-        ret.setRemoveAbandonedOnMaintenance(Boolean.valueOf(propertyResolver.getProperty("removeAbandoned")));
-        ret.setLogAbandoned(Boolean.valueOf(propertyResolver.getProperty("logAbandoned")));
-
-        ret.setMaxConnLifetimeMillis(Integer.parseInt(propertyResolver.getProperty("maxLifeTime")));
-        ret.setMaxWaitMillis(Integer.parseInt(propertyResolver.getProperty("maxWaitTime")));
-        return ret;
+        if (metricRegistry != null) {
+            config.setMetricRegistry(metricRegistry);
+        }
+        return new HikariDataSource(config);
     }
 
     @Bean(name = "liquibase")
